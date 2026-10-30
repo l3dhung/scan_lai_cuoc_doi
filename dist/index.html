@@ -3093,7 +3093,7 @@
     }
   }
 }</script>
-  <script type="application/json" id="buildManifest">{"name":"Scan lại cuộc đời","version":"1.0.4","generatedAtUtc":"2026-10-29T23:36:19.858Z","dependencyCount":0,"runtimeNetworkBlocked":true}</script>
+  <script type="application/json" id="buildManifest">{"name":"Scan lại cuộc đời","version":"1.0.4","generatedAtUtc":"2026-10-29T23:58:44.027Z","dependencyCount":0,"runtimeNetworkBlocked":true}</script>
   <script type="application/json" id="assetBundle">"e30="</script>
   <script>
     (() => {
@@ -3459,6 +3459,11 @@
       const HOLD_MS = 900;
       function avgMove(a, b) { return a.reduce((n, p, i) => n + Math.hypot(p.x - b[i].x, p.y - b[i].y), 0) / 4 }
       // Mean absolute difference of a tiny grayscale thumbnail between frames: detects hand shake and scene changes.
+      // Coarse, blurred layout of the page inside the outline (20×28 cells, normalized). A page swapped in at the same
+      // spot keeps the outline and frame almost unchanged, but its text layout differs from the page just kept.
+      const NEW_PAGE_SIMILARITY = .8;
+      function pageFingerprint(canvas, q) { const W = 20, H = 28, cw = canvas.width, ch = canvas.height, d = canvas.getContext('2d', { willReadFrequently: true }).getImageData(0, 0, cw, ch).data, out = new Float32Array(W * H); let sum = 0; for (let y = 0; y < H; y++)for (let x = 0; x < W; x++) { let g = 0; for (let sy = 0; sy < 3; sy++)for (let sx = 0; sx < 3; sx++) { const u = .04 + .92 * (x + (sx + .5) / 3) / W, v = .04 + .92 * (y + (sy + .5) / 3) / H, px = (1 - u) * (1 - v) * q[0].x + u * (1 - v) * q[1].x + u * v * q[2].x + (1 - u) * v * q[3].x, py = (1 - u) * (1 - v) * q[0].y + u * (1 - v) * q[1].y + u * v * q[2].y + (1 - u) * v * q[3].y, i = (clamp(Math.round(py), 0, ch - 1) * cw + clamp(Math.round(px), 0, cw - 1)) * 4; g += .299 * d[i] + .587 * d[i + 1] + .114 * d[i + 2] } out[y * W + x] = g / 9; sum += g / 9 } const mean = sum / out.length; let sq = 0; for (let i = 0; i < out.length; i++) { out[i] -= mean; sq += out[i] * out[i] } const sd = Math.sqrt(sq / out.length) || 1; for (let i = 0; i < out.length; i++)out[i] /= sd; return out }
+      function fingerprintSimilarity(a, b) { let s = 0; for (let i = 0; i < a.length; i++)s += a[i] * b[i]; return s / a.length }
       function frameMotion(source) { const w = 48, h = Math.max(8, Math.round(48 * source.height / source.width)), c = frameMotion.canvas || (frameMotion.canvas = document.createElement('canvas')); c.width = w; c.height = h; const ctx = c.getContext('2d', { willReadFrequently: true }); ctx.drawImage(source, 0, 0, w, h); const d = ctx.getImageData(0, 0, w, h).data, g = new Uint8Array(w * h); for (let i = 0, j = 0; j < g.length; i += 4, j++)g[j] = (d[i] * 77 + d[i + 1] * 150 + d[i + 2] * 29) >> 8; const prev = frameMotion.prev; frameMotion.prev = g; if (!prev || prev.length !== g.length) return 99; let sum = 0; for (let j = 0; j < g.length; j++)sum += Math.abs(g[j] - prev[j]); return sum / g.length }
       // Between procedures the camera stays on but nothing is detected or captured.
       function pauseDetection() { clearGuide(); state.liveDetection = null; state.auto.holdStart = 0; state.auto.smooth = null; state.auto.lastCorners = null; $('#shutterBtn').classList.remove('holding'); $('#detectChip').classList.remove('good', 'partial'); $('#detectLabel').textContent = t('procedureIdle') }
@@ -3472,6 +3477,7 @@
           if (det.valid && det.confidence > .42) state.liveDetection = { corners: shown.map(p => ({ ...p })), confidence: det.confidence, at: now }; else state.liveDetection = null;
           // After a page is kept, wait until it is replaced (page lost, moved, or the scene changed) before capturing again.
           if (a.needChange && (!det.valid || (a.capturedCorners && avgMove(n, a.capturedCorners) > .08) || motion > 14)) a.needChange = false;
+          if (a.needChange && det.valid && a.capturedPrint) { a.lastSimilarity = fingerprintSimilarity(pageFingerprint(temp, det.corners), a.capturedPrint); if (a.lastSimilarity < NEW_PAGE_SIMILARITY) a.needChange = false }
           const ready = det.valid && det.full && det.confidence >= .56, steady = ready && !!a.lastCorners && avgMove(n, a.lastCorners) < .012 && motion < 6; a.lastCorners = det.valid ? n : null;
           const canAuto = state.autoCapture && !a.needChange && now >= a.armedAt && !state.editor && !state.importQueue && !state.sessionBusy;
           if (canAuto && steady) a.holdStart = a.holdStart || now; else a.holdStart = 0;
@@ -3549,7 +3555,7 @@
       }
 
       async function fileToBitmap(file) { try { if ('createImageBitmap' in window) return await createImageBitmap(file, { imageOrientation: 'from-image' }) } catch { } return await new Promise((resolve, reject) => { const img = new Image(), url = URL.createObjectURL(file); img.onload = () => { URL.revokeObjectURL(url); resolve(img) }; img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('decode')) }; img.src = url }) }
-      async function captureFrame() { if (state.editor || state.importQueue) return; if (!state.procedureActive) { status(t('procedureIdle'), 4200); return } const v = $('#video'); if (!state.stream || v.readyState < 2) return; const r = videoSourceRect(v), c = document.createElement('canvas'); c.width = Math.max(1, Math.round(r.sw)); c.height = Math.max(1, Math.round(r.sh)); c.getContext('2d').drawImage(v, r.sx, r.sy, r.sw, r.sh, 0, 0, c.width, c.height); const live = state.liveDetection && performance.now() - state.liveDetection.at <= 1100 ? { corners: state.liveDetection.corners.map(p => ({ ...p })), confidence: state.liveDetection.confidence } : null; const result = await openEditorFromSource(c, 'camera', live), a = state.auto; a.holdStart = 0; a.lastCorners = null; a.needChange = result !== 'retake'; a.capturedCorners = live?.corners || null; a.armedAt = performance.now() + (result === 'retake' ? 1400 : 900) }
+      async function captureFrame() { if (state.editor || state.importQueue) return; if (!state.procedureActive) { status(t('procedureIdle'), 4200); return } const v = $('#video'); if (!state.stream || v.readyState < 2) return; const r = videoSourceRect(v), c = document.createElement('canvas'); c.width = Math.max(1, Math.round(r.sw)); c.height = Math.max(1, Math.round(r.sh)); c.getContext('2d').drawImage(v, r.sx, r.sy, r.sw, r.sh, 0, 0, c.width, c.height); const live = state.liveDetection && performance.now() - state.liveDetection.at <= 1100 ? { corners: state.liveDetection.corners.map(p => ({ ...p })), confidence: state.liveDetection.confidence } : null; let print = null; if (live) { const small = document.createElement('canvas'), s = Math.min(1, 360 / Math.max(c.width, c.height)); small.width = Math.max(1, Math.round(c.width * s)); small.height = Math.max(1, Math.round(c.height * s)); small.getContext('2d').drawImage(c, 0, 0, small.width, small.height); print = pageFingerprint(small, live.corners.map(p => ({ x: p.x * small.width, y: p.y * small.height }))) } const result = await openEditorFromSource(c, 'camera', live), a = state.auto; a.holdStart = 0; a.lastCorners = null; a.needChange = result !== 'retake'; a.capturedCorners = live?.corners || null; a.capturedPrint = print; a.armedAt = performance.now() + (result === 'retake' ? 1400 : 900) }
       async function importFiles(files) {
         if (state.importQueue || state.editor) return;
         const arr = [...files].slice(0, 30); $('#fileInput').value = ''; if (!arr.length) return;
