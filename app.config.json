@@ -1,10 +1,10 @@
 {
   "$schema": "./schemas/app-config.schema.json",
-  "name": "Scan lại cuộc đời",
+  "name": "Life-scanner",
   "slug": "document-scanner",
   "version": "1.0.4",
-  "description": "Scan paper documents, correct perspective, organize pages, and create submission-ready PDFs entirely in your browser.",
-  "defaultLanguage": "en",
+  "description": "Life-scanner: chụp giấy tờ, nắn phẳng, sắp trang và xuất PDF ngay trên máy, không gửi gì đi đâu.",
+  "defaultLanguage": "vi",
   "repository": {
     "owner": "ttomohisa",
     "name": "htmlapps-document-scanner"

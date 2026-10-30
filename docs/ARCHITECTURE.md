@@ -10,7 +10,7 @@ All runtime code is embedded in one HTML file. The main responsibilities are:
 - throttled live document detection and optional stable auto-capture
 - document-corner detector that scores edge strength, paper/background contrast, line consistency, coverage, and quadrilateral geometry
 - page editor with corrected-result preview, manual four-corner correction, 1–4× zoom, wheel/pinch zoom, and pan
-- WebGL perspective warper with a Canvas 2D fallback
+- one-pass WebGL page renderer (perspective warp, edge cleanup, filter, rotation) on a shared context, with a Canvas 2D fallback
 - readability filters: No enhancement, Auto, Color, Grayscale, and B&W
 - in-memory page store with compressed editable source, thumbnail preview, re-edit, rotate, reorder, delete, and Undo
 - smartphone page-like navigation between Scan / Pages / PDF
@@ -22,18 +22,24 @@ No third-party runtime package is required. Image processing uses browser-native
 
 When a page is first captured or imported, the original working image is kept only long enough to create the corrected page and a compressed editable source. The page list stores:
 
-- corrected page canvas used for preview/export
+- corrected page as a JPEG (quality 0.82, long side up to 2400 px), embedded in the PDF as is when no size limit is set
 - selected readability mode and rotation
 - thumbnail
 - compressed editable source plus the current four corner coordinates
 
-Save as new page uses the existing editor-output pipeline and inserts a new ID immediately after the source page, resolving the source by ID after asynchronous work. The original page stays untouched. Each page owns its processed canvas and corner objects; compressed source Blobs may be shared because they are immutable. The two save actions share the same single-flight, snapshot, cancellation, and retry guards.
+Save as new page uses the existing editor-output pipeline and inserts a new ID immediately after the source page, resolving the source by ID after asynchronous work. The original page stays untouched. Each page owns its corrected JPEG and corner objects; compressed source Blobs may be shared because they are immutable. The two save actions share the same single-flight, snapshot, cancellation, and retry guards.
 
 This allows the Preview action to reopen a page and change readability or corner correction without retaining a second full-resolution source canvas for every page.
 
+## Render pipeline
+
+The source photo is uploaded to one shared WebGL context once per editor session. For each corner position the renderer draws a ~900 px copy of the page plus a 480 px copy of the whole photo side by side and reads them back in a single `readPixels`; the edge-cleanup mask and the filter statistics (Auto paper-brightness grid, Color levels) are computed from that on the CPU. Every render after that (the editor preview at display size, the full page, rotations) is one shader pass with no readback. GPU readbacks are the expensive step on integrated GPUs while the camera is running (tens of milliseconds each, regardless of size), so the pipeline avoids them, keeps a fixed-size drawing buffer, and builds page thumbnails on the CPU from the analysis pixels.
+
+On paper-like pages the Auto filter turns pixels near the local paper brightness into pure white (colored marks such as stamps and highlighter are kept), which makes page JPEGs noticeably smaller. Page and source JPEGs are encoded in idle time; anything that needs one earlier (Done, re-edit, rotate) starts that encode at once. The Canvas 2D fallback runs the same filter formulas on the CPU.
+
 ## Output sizing
 
-The 1 MB / 2 MB presets budget bytes per page and reduce JPEG quality first, then raster dimensions. The generated PDF is measured after creation; if necessary, a tighter pass is attempted. The final readiness panel reports actual output size and whether the selected target was met.
+The 1 MB / 2 MB presets budget bytes per page. A page whose stored JPEG fits is used as is; otherwise the target size is predicted from the stored JPEG's size and a few encodes pick the quality and raster dimensions. Pages are encoded in parallel. The generated PDF is measured after creation; if necessary, a tighter pass is attempted. The final readiness panel reports actual output size and whether the selected target was met.
 
 ## Privacy boundary
 

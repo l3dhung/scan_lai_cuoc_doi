@@ -32,6 +32,7 @@ PING_PATH = "/.document-scanner-ping"
 PING_BODY = b"document-scanner"
 IDLE_SECONDS = 15 * 60
 MAX_PDF_BYTES = 300 * 1024 * 1024
+# Kept from the app's old name (Document Scanner) so saved Save-to folders survive the rename to Life-scanner.
 CONFIG_DIR = os.path.expanduser("~/Library/Application Support/Document Scanner")
 CONFIG_PATH = os.path.join(CONFIG_DIR, "bridge.json")
 

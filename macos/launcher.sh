@@ -1,5 +1,5 @@
 #!/bin/bash
-# Entry point inside "Document Scanner.app" (Contents/MacOS/DocumentScanner).
+# Entry point inside "Life-scanner.app" (Contents/MacOS/DocumentScanner).
 # Starts the loopback server if needed, then opens the app in the default browser.
 set -u
 

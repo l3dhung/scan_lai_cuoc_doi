@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="vi">
 
 <head>
   <meta charset="utf-8">
@@ -8,9 +8,9 @@
   <meta name="theme-color" content="#f5f5f2">
   <meta http-equiv="Content-Security-Policy"
     content="default-src 'self' data: blob:; script-src 'self' 'unsafe-inline' blob:; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data: blob:; media-src 'self' data: blob:; worker-src 'self' blob:; connect-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'">
-  <title>Scan lại cuộc đời</title>
+  <title>Life-scanner</title>
   <meta name="description"
-    content="Scan paper documents, correct perspective, organize pages, and create submission-ready PDFs entirely in your browser.">
+    content="Life-scanner: chụp giấy tờ, nắn phẳng, sắp trang và xuất PDF ngay trên máy, không gửi gì đi đâu.">
   <link rel="icon"
     href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%2316624f'/%3E%3Cpath d='M18 14h28v36H18z' fill='white'/%3E%3Cpath d='M13 23v-9h9M51 23v-9h-9M13 41v9h9M51 41v9h-9' fill='none' stroke='white' stroke-width='4' stroke-linecap='round'/%3E%3Cpath d='M25 26h14M25 33h14M25 40h9' fill='none' stroke='%2316624f' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
   <style>
@@ -1548,6 +1548,16 @@
       text-align: center
     }
 
+    .help-credit {
+      margin: 18px 0 0;
+      padding-top: 12px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 12px;
+      font-style: italic;
+      text-align: center
+    }
+
     .mobile-camera-top,
     .camera-error {
       display: none
@@ -2638,9 +2648,9 @@
               stroke-width="1.8" stroke-linecap="round" />
           </svg></div>
         <div class="brand-copy">
-          <h1 class="brand-name"><span data-i18n="appName">Scan lại cuộc đời</span><span class="version-badge"
+          <h1 class="brand-name"><span data-i18n="appName">Life-scanner</span><span class="version-badge"
               data-app-version></span></h1>
-          <p class="brand-meta" data-i18n="brandMeta">Correct, organize, and meet upload rules on-device</p>
+          <p class="brand-meta"><span data-i18n="brandMeta">Scan cái đíu gì cũng được, nó ra pdf hết</span> - <span data-i18n="credit">App được chế cháo bởi Mr.HL, khi sử dụng vui lòng không quạu</span></p>
         </div>
       </div>
       <div class="header-actions">
@@ -2672,7 +2682,7 @@
       <div class="camera-preview-shell" id="cameraShell">
         <video id="video" autoplay playsinline muted></video><canvas id="guideCanvas"></canvas>
         <div class="mobile-camera-top">
-          <div class="mobile-camera-title"><span data-i18n="appName">Scan lại cuộc đời</span><span class="version-badge"
+          <div class="mobile-camera-title"><span data-i18n="appName">Life-scanner</span><span class="version-badge"
               data-app-version></span></div>
           <div class="mobile-camera-actions"><button class="mobile-camera-power" id="mobileCameraPowerBtn" type="button"
               data-i18n-aria="turnCameraOff" aria-label="Turn camera off"><svg viewBox="0 0 24 24" fill="none">
@@ -2692,7 +2702,7 @@
               <path d="M4 4l16 16" stroke="currentColor" stroke-width="1.8" />
             </svg>
             <h3 data-i18n="cameraErrorTitle">Camera unavailable</h3>
-            <p id="cameraErrorText">Could not start the camera.</p>
+            <p id="cameraErrorText">Không bật được cam.</p>
             <div class="camera-error-actions"><button class="primary" id="retryCameraBtn" type="button"
                 data-i18n="retryCamera">Retry</button><button id="errorImportBtn" type="button"
                 data-i18n="importImages">Add images</button></div>
@@ -2723,12 +2733,12 @@
               aria-label="Turn camera off"><svg viewBox="0 0 24 24" fill="none">
                 <path d="M12 3v8" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" />
                 <path d="M7.1 5.9a8 8 0 1 0 9.8 0" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" />
-              </svg><span class="camera-power-state" id="desktopCameraPowerState">OFF</span></button>
+              </svg><span class="camera-power-state" id="desktopCameraPowerState">TẮT</span></button>
           </div>
         </div>
         <div class="mobile-zoom-bar" id="mobileZoomBar"><button class="mobile-zoom-reset" id="mobileZoomReset"
             type="button">1×</button><input id="mobileZoomRange" type="range" min="1" max="1" step="0.1" value="1"
-            aria-label="Zoom"><span class="mobile-zoom-label" id="mobileZoomValue">1.0×</span></div>
+            data-i18n-aria="zoom" aria-label="Phóng to"><span class="mobile-zoom-label" id="mobileZoomValue">1.0×</span></div>
         <button class="camera-done-btn hidden" id="cameraDoneBtn" type="button"><svg viewBox="0 0 24 24" fill="none">
             <path d="m5 12.5 4.2 4.2L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"
               stroke-linejoin="round" />
@@ -2753,7 +2763,7 @@
                 stroke-linecap="round" />
               <path d="m9 12 2 2 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
                 stroke-linejoin="round" />
-            </svg><span class="camera-action-label">AUTO</span></button>
+            </svg><span class="camera-action-label" data-i18n="autoShort">TỰ CHỤP</span></button>
           <button class="round-camera-btn" id="switchCameraBtn" type="button" disabled
             data-i18n-aria="switchCamera"><svg viewBox="0 0 24 24" fill="none">
               <path d="M17.5 7H20v-2.5M20 4.5A8 8 0 0 0 5.4 7M6.5 17H4v2.5M4 19.5A8 8 0 0 0 18.6 17"
@@ -2782,7 +2792,7 @@
             <div class="folder-row"><span class="folder-name" id="folderLabel">Downloads</span><button class="btn small"
                 id="chooseFolderBtn" type="button" data-i18n="chooseFolder">Choose…</button><button
                 class="btn small hidden" id="clearFolderBtn" type="button" data-i18n-aria="useDownloads"
-                aria-label="Save to Downloads instead" title="Save to Downloads instead"><svg viewBox="0 0 24 24"
+                aria-label="Save to Downloads instead" title="Thôi, lưu vào Downloads"><svg viewBox="0 0 24 24"
                   fill="none">
                   <path d="m7 7 10 10M17 7 7 17" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" />
                 </svg></button></div>
@@ -2816,7 +2826,7 @@
           </div>
           <div class="zoom-wrap" id="zoomWrap">
             <div class="zoom-head"><span data-i18n="zoom">Zoom</span><span id="zoomValue">1.0×</span></div><input
-              id="zoomRange" type="range" min="1" max="1" step="0.1" value="1" aria-label="Zoom">
+              id="zoomRange" type="range" min="1" max="1" step="0.1" value="1" data-i18n-aria="zoom" aria-label="Phóng to">
           </div>
         </div>
         <div class="side-block camera-help">
@@ -2926,7 +2936,7 @@
       </div>
     </section>
   </main>
-  <nav class="mobile-nav" id="mobileNav" aria-label="Mobile navigation">
+  <nav class="mobile-nav" id="mobileNav" data-i18n-aria="mobileNav" aria-label="Điều hướng">
     <button class="active" type="button" data-target="scanSection"><svg viewBox="0 0 24 24" fill="none">
         <path d="M5 8V5h3M16 5h3v3M19 16v3h-3M8 19H5v-3" stroke="currentColor" stroke-width="1.8"
           stroke-linecap="round" />
@@ -2942,13 +2952,12 @@
         <path d="M15 3v5h5M10 13h6M10 17h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
       </svg><span data-i18n="navPdf">PDF</span></button>
   </nav>
-  <footer><span data-i18n="footerPrivacy">Selected images, camera frames, and PDFs are not transmitted by this
-      app.</span></footer>
+  <footer><span data-i18n="footerPrivacy">Ảnh, khung hình camera và PDF không bị gửi đi đâu hết.</span></footer>
 
   <dialog id="helpDialog">
     <div class="dialog-head">
       <h2 data-i18n="helpTitle">How to use &amp; notes</h2><button class="header-icon" data-close="helpDialog"
-        type="button" aria-label="Close"><svg viewBox="0 0 24 24" fill="none">
+        type="button" data-i18n-aria="close" aria-label="Đóng"><svg viewBox="0 0 24 24" fill="none">
           <path d="m7 7 10 10M17 7 7 17" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" />
         </svg></button>
     </div>
@@ -2986,22 +2995,23 @@
         <li data-i18n="helpLimit4">OCR/searchable text layers are not included.</li>
       </ul>
       <!-- APP:HELP:END -->
+      <p class="help-credit" data-i18n="credit">App được chế cháo bởi Mr.HL, khi sử dụng vui lòng không quạu</p>
     </div>
   </dialog>
 
   <dialog class="editor-dialog" id="editorDialog">
     <div class="dialog-head">
       <h2 id="editorTitle" data-i18n="adjustPage">Correct page</h2><button class="header-icon" id="editorCloseBtn"
-        type="button" aria-label="Close"><svg viewBox="0 0 24 24" fill="none">
+        type="button" data-i18n-aria="close" aria-label="Đóng"><svg viewBox="0 0 24 24" fill="none">
           <path d="m7 7 10 10M17 7 7 17" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" />
         </svg></button>
     </div>
     <div class="editor-body">
       <div class="crop-stage" id="cropStage"><canvas id="cropCanvas"></canvas><button class="corner-handle"
-          data-corner="0" aria-label="Top left"></button><button class="corner-handle" data-corner="1"
-          aria-label="Top right"></button><button class="corner-handle" data-corner="2"
-          aria-label="Bottom right"></button><button class="corner-handle" data-corner="3"
-          aria-label="Bottom left"></button>
+          data-corner="0" data-i18n-aria="cornerTopLeft" aria-label="Góc trên trái"></button><button class="corner-handle" data-corner="1"
+          data-i18n-aria="cornerTopRight" aria-label="Góc trên phải"></button><button class="corner-handle" data-corner="2"
+          data-i18n-aria="cornerBottomRight" aria-label="Góc dưới phải"></button><button class="corner-handle" data-corner="3"
+          data-i18n-aria="cornerBottomLeft" aria-label="Góc dưới trái"></button>
         <div class="editor-zoom-controls hidden" id="editorZoomControls"><button class="editor-zoom-btn"
             id="editorZoomOutBtn" type="button" data-i18n-aria="zoomOut" aria-label="Zoom out"><svg viewBox="0 0 24 24"
               fill="none">
@@ -3049,7 +3059,7 @@
             id="stopImportBtn" type="button" data-i18n="stopImport">Stop import</button><button class="btn small hidden"
             id="saveAsNewPageBtn" type="button" data-i18n="saveAsNewPage">Save as new page</button><button
             class="btn primary" id="addPageBtn" type="button" data-i18n="addPage">Add this page</button><button
-            class="btn primary hidden" id="doneBtn" type="button">Done</button></div>
+            class="btn primary hidden" id="doneBtn" type="button">Xong</button></div>
       </aside>
     </div>
   </dialog>
@@ -3093,87 +3103,87 @@
         warn: '<svg viewBox="0 0 24 24" fill="none"><path d="m12 3 9 17H3L12 3Z" stroke="currentColor" stroke-width="1.7"/><path d="M12 9v5M12 17h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>'
       };
       const I18N = {
-        en: {
-          appName: 'Scan lại cuộc đời',
+        vi: {
+          appName: 'Life-scanner',
           brandMeta: 'Scan cái đíu gì cũng được, nó ra pdf hết',
-          help: 'How to use & notes',
+          help: 'Cẩm nang sống sót',
           introTitle: 'Scan lại cuộc đời',
           introText: 'Đừng nghĩ gì nhiều, cứ làm thôi.',
           localOnly: 'không cần kết nối mạng',
-          cameraReadyTitle: 'Scan paper with your camera',
+          cameraReadyTitle: 'Chĩa cam vào giấy là xong',
           cameraReadyText: 'Nếu không có cam thì dùng ảnh có sẵn.',
           cameraOffTitle: 'Camera đang tắt',
           cameraOffText: 'Chỉ bật cam khi cần, tránh tự chụp không cần thiết, tắt cam vẫn nhập ảnh ok.',
-          turnCameraOff: 'Turn camera off',
-          turnCameraOn: 'Turn camera on',
-          cameraOff: 'Camera stopped',
+          turnCameraOff: 'Tắt cam',
+          turnCameraOn: 'Bật cam',
+          cameraOff: 'Cam đi nghỉ rồi',
           detectWaiting: 'đặt tài liệu cho ngay ngắn vào',
           detectFound: 'Phát hiện tài liệu',
           detectSteady: 'Giữ im tài liệu',
           autoArmed: 'Tự động chụp đang BẬT',
-          torch: 'Torch',
-          switchCamera: 'Switch camera',
-          capture: 'Capture',
-          importImages: 'Add images',
+          torch: 'Đèn pin',
+          switchCamera: 'Đổi cam',
+          capture: 'Chụp',
+          importImages: 'Thêm ảnh có sẵn',
           scanOptions: 'Tự động chụp',
           autoDesc: 'Tự chụp khi mầy giữ im được tài liệu',
-          autoCapture: 'Auto capture',
-          zoom: 'Zoom',
-          zoomOptical: 'Camera zoom',
-          zoomDigital: 'Digital zoom',
+          autoCapture: 'Tự chụp',
+          zoom: 'Phóng to',
+          zoomOptical: 'Zoom xịn của cam',
+          zoomDigital: 'Zoom “ảo”',
           goodScanTitle: 'Mẹo !!',
           goodScanText: 'Đừng đốt tài liệu là được.',
           existingImages: 'Dùng ảnh có sẵn',
           existingImagesText: 'Chọn nhiều ảnh cũng ok',
-          startCamera: 'Start camera',
-          stopCamera: 'Stop camera',
-          pages: 'Pages',
-          pagesDesc: 'Drag cards directly to reorder — no long press required.',
-          clearAll: 'Delete all',
-          noPages: 'No pages yet',
-          noPagesText: 'Capture a page or add existing images to begin.',
-          submissionPdf: 'Submission PDF',
-          submissionPdfDesc: 'Set paper, color, and file-size requirements for the destination.',
-          quickPreset: 'Submission presets',
-          presetStandard: 'Standard',
-          presetBw: 'B&W',
-          paperSize: 'Paper',
-          originalRatio: 'Original ratio',
-          pdfColor: 'PDF color',
-          keepPageFilter: 'Per-page setting',
-          color: 'Color',
-          grayscale: 'Grayscale',
-          blackWhite: 'B&W',
-          maxSize: 'Max size',
-          noLimit: 'No limit',
-          filename: 'Output filename',
-          filenameHelp: 'If you omit .pdf, it will be added automatically.',
-          navScan: 'Scan',
-          navPages: 'Pages',
+          startCamera: 'Bật cam lên',
+          stopCamera: 'Tắt cam',
+          pages: 'Các trang đã chụp',
+          pagesDesc: 'Kéo thả thẻ để đổi thứ tự, khỏi cần giữ lâu.',
+          clearAll: 'Xóa sạch sành sanh',
+          noPages: 'Chưa có trang nào',
+          noPagesText: 'Chụp một trang hoặc thêm ảnh có sẵn để bắt đầu cuộc đời mới.',
+          submissionPdf: 'Xuất PDF',
+          submissionPdfDesc: 'Chỉnh khổ giấy, màu và dung lượng theo yêu cầu nơi nhận, khó tính cỡ nào cũng chiều.',
+          quickPreset: 'Cài sẵn cho nhanh',
+          presetStandard: 'Tiêu chuẩn',
+          presetBw: 'Đen trắng',
+          paperSize: 'Khổ giấy',
+          originalRatio: 'Giữ tỉ lệ gốc',
+          pdfColor: 'Màu PDF',
+          keepPageFilter: 'Theo từng trang',
+          color: 'Màu',
+          grayscale: 'Thang xám',
+          blackWhite: 'Đen trắng',
+          maxSize: 'Dung lượng tối đa',
+          noLimit: 'Không giới hạn',
+          filename: 'Tên file PDF',
+          filenameHelp: 'Quên gõ .pdf cũng không sao, app tự thêm.',
+          navScan: 'Chụp',
+          navPages: 'Trang',
           navPdf: 'PDF',
-          readyCheck: 'Pre-submit check',
-          downloadPdf: 'Save PDF',
-          sharePdf: 'Share',
-          currentSettings: 'Current settings',
-          currentSettingsDesc: 'When a size limit is set, image quality and resolution are reduced only as much as needed.',
-          pagesLabel: 'Pages',
-          generatePdf: 'Create PDF',
-          footerPrivacy: 'Selected images, camera frames, and PDFs are not transmitted by this app.',
-          helpTitle: 'How to use & notes',
-          helpHowTitle: 'Basic workflow',
-          helpStep1: 'The camera starts off. Choose Start camera or the power icon when needed, or add an existing image while the camera stays off. Use the power icon at the top to turn the camera off. On narrow screens, use Image in the bottom dock.',
-          helpStep2: 'Check the detected corners, zoom in when useful, and drag the round handles to the paper edges.',
-          helpStep3: 'Check the actual corrected result, switch to Adjust corners when needed, and choose a readability mode including no enhancement. You can edit it again from the page Preview button.',
-          helpStep4: 'Set the output filename and choose 1 MB, 2 MB, A4, B&W, or custom requirements, then create and save/share the PDF.',
-          helpPrivacyTitle: 'Privacy',
-          helpPrivacyText: 'Image processing and PDF creation run inside this page. The app does not send images, PDFs, or inputs to a server. Working pages live only in memory and disappear on reload/close.',
-          helpLimitTitle: 'Notes',
-          helpLimit1: 'Chrome can use the camera on HTTPS, localhost, and directly opened file:// HTML. Other browsers or permission settings may differ; image import remains available.',
-          helpLimit2: 'Zoom works with the slider and pinch gestures on mobile. If the camera has no native zoom, the app uses centered digital zoom. Automatic corner detection can miss on difficult backgrounds, shadows, or glossy paper, so always check the preview.',
-          helpLimit3: 'A size limit may reduce image quality and resolution. Zoom into small text in the generated PDF before submitting.',
-          helpLimit4: 'OCR/searchable text layers are not included.',
+          readyCheck: 'Soát lần cuối trước khi nộp',
+          downloadPdf: 'Lưu PDF',
+          sharePdf: 'Chia sẻ',
+          currentSettings: 'Cài đặt hiện tại',
+          currentSettingsDesc: 'Có giới hạn dung lượng thì app chỉ bóp chất lượng ảnh vừa đủ, không bóp quá tay.',
+          pagesLabel: 'Số trang',
+          generatePdf: 'Tạo PDF',
+          footerPrivacy: 'Ảnh, khung hình camera và PDF không bị gửi đi đâu hết, nằm yên trong máy mầy.',
+          helpTitle: 'Cẩm nang sống sót',
+          helpHowTitle: 'Làm sao cho đúng',
+          helpStep1: 'Mở app lên thì camera đang tắt. Bấm “Bật cam lên” hoặc nút nguồn khi cần, hoặc thêm ảnh có sẵn mà khỏi bật cam. Muốn tắt cam thì bấm nút nguồn phía trên. Màn hình hẹp thì dùng nút Ảnh ở thanh dưới.',
+          helpStep2: 'Xem lại 4 góc app tìm được, phóng to nếu cần, rồi kéo các nút tròn về đúng mép giấy.',
+          helpStep3: 'Xem kết quả sau khi nắn phẳng, cần thì chuyển sang “Chỉnh lại góc”, rồi chọn kiểu làm rõ chữ (kể cả “Để nguyên”). Muốn sửa lại sau thì bấm nút Xem trên thẻ trang.',
+          helpStep4: 'Đặt tên file, chọn 1 MB, 2 MB, A4, đen trắng hoặc tự chỉnh theo yêu cầu, rồi tạo PDF và lưu hoặc chia sẻ.',
+          helpPrivacyTitle: 'Riêng tư',
+          helpPrivacyText: 'Xử lý ảnh và tạo PDF đều chạy ngay trong trang này. App không gửi ảnh, PDF hay bất cứ thứ gì lên máy chủ. Các trang đang làm chỉ nằm trong bộ nhớ, tải lại hoặc đóng trang là bay màu.',
+          helpLimitTitle: 'Lưu ý',
+          helpLimit1: 'Chrome dùng được camera trên HTTPS, localhost và file HTML mở trực tiếp (file://). Trình duyệt khác hoặc cài đặt quyền có thể khác; còn nhập ảnh thì lúc nào cũng dùng được.',
+          helpLimit2: 'Phóng to bằng thanh trượt hoặc chụm hai ngón trên điện thoại. Cam không có zoom thật thì app zoom số ở giữa khung hình. Nhận diện góc có thể trượt khi nền rối, có bóng đổ hoặc giấy bóng, nên nhớ xem lại ảnh trước.',
+          helpLimit3: 'Giới hạn dung lượng có thể làm ảnh kém nét hơn. Phóng to xem chữ nhỏ trong PDF trước khi nộp, kẻo bị trả hồ sơ.',
+          helpLimit4: 'Không có OCR nên PDF không tìm được chữ (app scan chứ không phải app đọc).',
           adjustPage: 'Chốt hạ',
-          previewPage: 'Preview page',
+          previewPage: 'Xem trước trang',
           finishPreview: 'Kết quả',
           cornerAdjust: 'Chỉnh lại góc',
           cornerTitle: 'Kiểm tra lại 4 góc',
@@ -3182,90 +3192,90 @@
           manualFallback: 'Tuy nhiên mầy chỉnh tay lại ok.',
           cornerRange: 'Điều chỉnh lại khung hình',
           cornerRangeText: 'Nhận diện lại trang hoặc reset khung hình về toàn ảnh.',
-          zoomOut: 'Zoom out',
-          zoomIn: 'Zoom in',
-          zoomReset: 'Reset view',
-          filter: 'Readability',
-          filterNone: 'No enhancement',
-          filterAuto: 'Auto',
-          redetect: 'Detect again',
-          fullImage: 'Full image',
-          skipImage: 'Skip image',
-          stopImport: 'Stop import',
-          importProgress: 'Image {current} / {total}',
-          processingFailed: 'Could not process this page. Please try again.',
-          addPage: 'Add this page',
-          saveAsNewPage: 'Save as new page',
-          savePage: 'Save changes',
-          pageUpdated: 'Page updated',
-          preview: 'Preview',
-          rotate: 'Rotate',
-          cancel: 'Cancel',
-          delete: 'Delete',
-          undo: 'Undo',
-          processing: 'Processing',
-          cameraDenied: 'Could not start the camera. Image import is still available.',
-          cameraErrorTitle: 'Camera unavailable',
-          retryCamera: 'Retry',
-          cameraPermissionDenied: 'Camera permission is blocked. Allow camera access from Chrome site settings and try again.',
-          cameraBusy: 'The camera is busy in another app or unavailable to the browser.',
-          cameraMissing: 'No usable camera was found.',
-          cameraContextError: 'This browser cannot use the camera API from the current context. Chrome can use it from file:// URLs.',
-          imageShort: 'Image',
-          switchCameraShort: 'Camera',
-          cameraOn: 'Camera started',
-          pageAdded: 'Page added',
-          pageDeleted: 'Page deleted',
-          allDeleted: 'All pages deleted',
-          deletePageTitle: 'Delete this page?',
-          deletePageMessage: 'You can restore it briefly with Undo.',
-          clearTitle: 'Delete all pages?',
-          clearMessage: 'All working pages will be removed.',
-          fileUnsupported: 'This image could not be decoded by the browser.',
-          tooMany: 'Up to 30 pages can be added at once.',
-          buildingPdf: 'Creating PDF',
-          compressing: 'Adjusting quality to match the size requirement…',
-          pdfReady: 'PDF created',
-          shareUnsupported: 'File sharing is not supported by this browser. Save the PDF and share it from your device.',
-          shared: 'Opened the share sheet',
-          downloaded: 'PDF saved',
-          checkPages: 'Pages included',
-          checkA4: 'Generated on A4 pages',
-          checkOriginal: 'Generated at original ratio',
-          checkSizeOk: 'Within size limit',
-          checkSizeWarn: 'Above size limit',
-          checkReadable: 'Images embedded in PDF',
-          page: 'Page',
-          cameraUnavailable: 'No camera',
-          cameraActive: 'Camera active',
-          autoFallback: 'Please check corners manually',
-          sizeTargetFailed: 'Compression reached the minimum practical quality but the PDF is still above the selected limit.',
-          workingLost: 'Reloading clears the current working pages.',
+          zoomOut: 'Thu nhỏ',
+          zoomIn: 'Phóng to',
+          zoomReset: 'Về như cũ',
+          filter: 'Làm rõ chữ',
+          filterNone: 'Để nguyên',
+          filterAuto: 'Tự động',
+          redetect: 'Dò lại',
+          fullImage: 'Lấy cả ảnh',
+          skipImage: 'Bỏ qua ảnh này',
+          stopImport: 'Thôi không nhập nữa',
+          importProgress: 'Ảnh {current} / {total}',
+          processingFailed: 'Trang này hơi khó nhằn, thử lại phát nữa nhé.',
+          addPage: 'Thêm trang này',
+          saveAsNewPage: 'Lưu thành trang mới',
+          savePage: 'Lưu thay đổi',
+          pageUpdated: 'Đã cập nhật trang',
+          preview: 'Xem',
+          rotate: 'Xoay',
+          cancel: 'Thôi',
+          delete: 'Xóa',
+          undo: 'Hoàn tác',
+          processing: 'Đang xử lý, chờ tí…',
+          cameraDenied: 'Không bật được cam. Vẫn nhập ảnh có sẵn được nhé.',
+          cameraErrorTitle: 'Cam dỗi rồi',
+          retryCamera: 'Thử lại',
+          cameraPermissionDenied: 'Cam đang bị chặn quyền. Vào cài đặt trang web của trình duyệt, cho phép camera rồi thử lại.',
+          cameraBusy: 'Cam đang bận với app khác, hoặc trình duyệt không mượn được.',
+          cameraMissing: 'Không tìm thấy cam nào xài được.',
+          cameraContextError: 'Trình duyệt không cho dùng camera ở đây. Chrome thì dùng được kể cả khi mở file:// trực tiếp.',
+          imageShort: 'Ảnh',
+          switchCameraShort: 'Đổi cam',
+          cameraOn: 'Cam đã lên sóng',
+          pageAdded: 'Đã thêm trang',
+          pageDeleted: 'Đã xóa trang',
+          allDeleted: 'Đã xóa sạch các trang',
+          deletePageTitle: 'Xóa trang này thật à?',
+          deletePageMessage: 'Lỡ tay thì bấm Hoàn tác ngay cho kịp.',
+          clearTitle: 'Xóa hết các trang?',
+          clearMessage: 'Toàn bộ trang đang làm sẽ bay màu.',
+          fileUnsupported: 'Trình duyệt chịu, không đọc nổi ảnh này.',
+          tooMany: 'Mỗi lần thêm tối đa 30 trang thôi, từ từ.',
+          buildingPdf: 'Đang tạo PDF',
+          compressing: 'Đang nén cho vừa dung lượng…',
+          pdfReady: 'PDF xong rồi',
+          shareUnsupported: 'Trình duyệt này không chia sẻ file được. Lưu PDF về máy rồi chia sẻ từ đó nhé.',
+          shared: 'Đã mở bảng chia sẻ',
+          downloaded: 'Đã lưu PDF',
+          checkPages: 'Đủ trang',
+          checkA4: 'Đúng khổ A4',
+          checkOriginal: 'Giữ tỉ lệ gốc',
+          checkSizeOk: 'Dung lượng trong giới hạn',
+          checkSizeWarn: 'Vượt giới hạn dung lượng',
+          checkReadable: 'Ảnh đã nằm gọn trong PDF',
+          page: 'Trang',
+          cameraUnavailable: 'Không có cam',
+          cameraActive: 'Cam đang chạy',
+          autoFallback: 'Kiểm tra lại các góc giúp cái',
+          sizeTargetFailed: 'Đã nén tới mức chịu hết nổi mà PDF vẫn vượt giới hạn. Bớt trang hoặc nới giới hạn nhé.',
+          workingLost: 'Tải lại trang là mất các trang đang làm đấy.',
           sessionTitle: 'Bắt đầu phiên scan',
           sessionDesc: 'Đời đã nhăn thì scan phải phẳng.',
           sessionName: 'Tên file scan ra nếu lười thì để trống.',
-          saveTo: 'Save to',
-          chooseFolder: 'Choose…',
-          useDownloads: 'Save to Downloads instead',
+          saveTo: 'Lưu vào',
+          chooseFolder: 'Chọn…',
+          useDownloads: 'Thôi, lưu vào Downloads',
           folderDownloads: 'Downloads',
           autoExport: 'Tự động tạo PDF sau khi chụp xong',
-          done: 'Done',
-          doneSave: 'Done & save PDF',
+          done: 'Xong',
+          doneSave: 'Xong & lưu PDF',
           retake: 'Chụp lại',
           addNextPage: 'Thêm trang',
-          detectPartial: 'Move back so all four corners are visible',
-          detectHold: 'Capturing — hold still',
-          detectNextPage: 'Place the next page',
-          savedTo: 'Saved: {path}',
-          saveFailed: 'Could not save to the chosen folder. The PDF was downloaded instead.',
-          folderPickFailed: 'Could not open the folder picker.',
-          folderUnsupported: 'This browser cannot save into a chosen folder, so PDFs go to Downloads.',
-          noPagesToExport: 'Capture or add at least one page first.',
-          showInFinder: 'Show in Finder',
+          detectPartial: 'Lùi ra tí, cho thấy đủ 4 góc',
+          detectHold: 'Đang chụp, đứng im!',
+          detectNextPage: 'Đặt trang tiếp theo vào',
+          savedTo: 'Đã lưu: {path}',
+          saveFailed: 'Không lưu được vào thư mục đã chọn, PDF đã chuyển vào Downloads.',
+          folderPickFailed: 'Không mở được hộp chọn thư mục.',
+          folderUnsupported: 'Trình duyệt này không lưu thẳng vào thư mục được, PDF sẽ vào Downloads.',
+          noPagesToExport: 'Chưa có trang nào mà đòi xuất? Chụp hoặc thêm ít nhất 1 trang đã.',
+          showInFinder: 'Mở trong Finder',
           procedureType: 'Loại thủ tục',
           autoPortrait: 'Tự động xoay sang dọc nếu tài liệu là dọc',
           cleanEdges: 'Xóa nền thừa quanh tài liệu',
-          autoNameHint: 'Empty = {name}_1, {name}_2, …',
+          autoNameHint: 'Để trống = {name}_1, {name}_2, …',
           newProcedure: 'Tạo',
           finishProcedure: 'Hoàn thành thủ tục',
           procedureIdle: 'Chưa bắt đầu thủ tục: nhập loại thủ tục rồi bấm “Tạo”',
@@ -3273,11 +3283,21 @@
           procedureNeedName: 'Nhập loại thủ tục trước khi bấm “Tạo”.',
           procedureStarted: 'Bắt đầu thủ tục {name}: camera bắt đầu tự nhận tài liệu',
           procedureFinished: 'Đã hoàn thành thủ tục {name}: camera ngừng nhận tài liệu',
-          chooseFolderFirst: 'Choose a Save to folder first. The procedure type becomes a subfolder inside it.',
-          helpStep5: 'Scan session: set the procedure type, file name and folder, then hold the page still. It is captured automatically once all four corners are found. After each page choose Retake to shoot it again, Thêm trang to keep it and scan the next page, or Done to create the PDF (one page or all pages so far) and save it straight to the chosen folder. Background showing through folded corners or curled edges is painted with the paper color.'
+          chooseFolderFirst: 'Chọn thư mục “Lưu vào” trước đã. Loại thủ tục sẽ thành thư mục con trong đó.',
+          helpStep5: 'Phiên scan: nhập loại thủ tục rồi bấm “Tạo”, đặt tên file (lười thì để trống) và chọn thư mục, rồi giữ im tài liệu. Thấy đủ 4 góc là app tự chụp. Sau mỗi trang: “Chụp lại” nếu chưa ưng, “Thêm trang” để giữ và chụp trang tiếp, hoặc “Xong” để tạo PDF và lưu thẳng vào thư mục đã chọn. Xong thủ tục thì bấm “Hoàn thành thủ tục” cho cam nghỉ. Góc gập, mép cong lộ nền sẽ được tô bằng màu giấy.',
+          powerOn: 'BẬT',
+          powerOff: 'TẮT',
+          autoShort: 'TỰ CHỤP',
+          mobileNav: 'Điều hướng',
+          close: 'Đóng',
+          cornerTopLeft: 'Góc trên trái',
+          cornerTopRight: 'Góc trên phải',
+          cornerBottomRight: 'Góc dưới phải',
+          cornerBottomLeft: 'Góc dưới trái',
+          credit: 'App được chế cháo bởi Mr.HL, khi sử dụng vui lòng không quạu'
         }
       };
-      const state = { lang: 'en', procedureActive: false, autoExport: true, autoPortrait: true, cleanEdges: true, procedure: '', procedureHistory: [], folder: null, sessionBusy: false, lastSaved: null, analyzing: false, auto: { smooth: null, lastCorners: null, holdStart: 0, armedAt: 0, needChange: false, capturedCorners: null }, pages: [], cameraError: null, stream: null, track: null, devices: [], deviceIndex: 0, torch: false, autoCapture: true, autoTimer: null, lastAutoCorners: null, liveDetection: null, stableCount: 0, editor: null, importQueue: null, lastDeleted: null, lastPdf: null, drag: null, previewLoop: null, zoom: 1, zoomMin: 1, zoomMax: 4, zoomMode: 'digital', mobileView: 'scanSection' };
+      const state = { lang: 'vi', procedureActive: false, autoExport: true, autoPortrait: true, cleanEdges: true, procedure: '', procedureHistory: [], folder: null, sessionBusy: false, lastSaved: null, analyzing: false, auto: { smooth: null, lastCorners: null, holdStart: 0, armedAt: 0, needChange: false, capturedCorners: null }, pages: [], cameraError: null, stream: null, track: null, devices: [], deviceIndex: 0, torch: false, autoCapture: true, autoTimer: null, lastAutoCorners: null, liveDetection: null, stableCount: 0, editor: null, importQueue: null, lastDeleted: null, lastPdf: null, drag: null, previewLoop: null, zoom: 1, zoomMin: 1, zoomMax: 4, zoomMode: 'digital', mobileView: 'scanSection' };
       function t(k) { return I18N[state.lang][k] || k }
       function applyI18n() { document.documentElement.lang = state.lang; $$('[data-i18n]').forEach(el => { const k = el.dataset.i18n; if (I18N[state.lang][k]) el.textContent = t(k) }); $$('[data-i18n-aria]').forEach(el => { const k = el.dataset.i18nAria; el.setAttribute('aria-label', t(k)) });['#helpBtn', '#mobileHelpBtn'].forEach(id => { const button = $(id); if (button) button.title = t('help') }); syncCameraUi(); renderPages(); renderChecksIfAny(); if (state.cameraError) $('#cameraErrorText').textContent = cameraErrorMessage(state.cameraError); if (state.editor) syncEditorUi() }
       function status(msg, ms = 2600) { const el = $('#statusLine'); el.textContent = msg; el.classList.add('show'); clearTimeout(status.timer); status.timer = setTimeout(() => el.classList.remove('show'), ms) }
@@ -3307,7 +3327,7 @@
           el.setAttribute('aria-label', t(key));
           el.title = t(key);
         }
-        const powerState = $('#desktopCameraPowerState'); if (powerState) powerState.textContent = on ? 'OFF' : 'ON';
+        const powerState = $('#desktopCameraPowerState'); if (powerState) powerState.textContent = t(on ? 'powerOff' : 'powerOn');
         const sideLabel = $('#startCameraBtn span'); if (sideLabel) sideLabel.textContent = t(on ? 'stopCamera' : 'startCamera');
         if (!on) {
           $('#cameraEmptyTitle').textContent = t('cameraOffTitle');
@@ -3450,7 +3470,9 @@
       function pauseDetection() { clearGuide(); state.liveDetection = null; state.auto.holdStart = 0; state.auto.smooth = null; state.auto.lastCorners = null; $('#shutterBtn').classList.remove('holding'); $('#detectChip').classList.remove('good', 'partial'); $('#detectLabel').textContent = t('procedureIdle') }
       async function analyzeVideoFrame() {
         if ($('#editorDialog').open || state.analyzing) return; if (!state.procedureActive) { pauseDetection(); return } const v = $('#video'); if (v.readyState < 2 || !v.videoWidth) return; state.analyzing = true; try {
-          const r = videoSourceRect(v), temp = document.createElement('canvas'), max = 360, s = Math.min(1, max / Math.max(r.sw, r.sh)); temp.width = Math.max(1, Math.round(r.sw * s)); temp.height = Math.max(1, Math.round(r.sh * s)); temp.getContext('2d').drawImage(v, r.sx, r.sy, r.sw, r.sh, 0, 0, temp.width, temp.height);
+          // One CPU-backed canvas reused every frame: detection, motion and fingerprint all read its pixels, and a GPU canvas
+          // would make each of those reads wait for a GPU readback.
+          const r = videoSourceRect(v), temp = analyzeVideoFrame.canvas || (analyzeVideoFrame.canvas = document.createElement('canvas')), max = 360, s = Math.min(1, max / Math.max(r.sw, r.sh)), tw = Math.max(1, Math.round(r.sw * s)), th = Math.max(1, Math.round(r.sh * s)); if (temp.width !== tw || temp.height !== th) { temp.width = tw; temp.height = th } temp.getContext('2d', { willReadFrequently: true }).drawImage(v, r.sx, r.sy, r.sw, r.sh, 0, 0, tw, th);
           const det = detectPage(temp), motion = frameMotion(temp), a = state.auto, now = performance.now(), n = det.corners.map(p => ({ x: p.x / temp.width, y: p.y / temp.height }));
           // Smooth the outline across frames so the guide and the capture hint stay steady.
           if (det.valid && a.smooth && avgMove(n, a.smooth) < .05) a.smooth = n.map((p, i) => ({ x: a.smooth[i].x * .5 + p.x * .5, y: a.smooth[i].y * .5 + p.y * .5 })); else a.smooth = det.valid ? n : null;
@@ -3536,7 +3558,7 @@
       }
 
       async function fileToBitmap(file) { try { if ('createImageBitmap' in window) return await createImageBitmap(file, { imageOrientation: 'from-image' }) } catch { } return await new Promise((resolve, reject) => { const img = new Image(), url = URL.createObjectURL(file); img.onload = () => { URL.revokeObjectURL(url); resolve(img) }; img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('decode')) }; img.src = url }) }
-      async function captureFrame() { if (state.editor || state.importQueue) return; if (!state.procedureActive) { status(t('procedureIdle'), 4200); return } const v = $('#video'); if (!state.stream || v.readyState < 2) return; const r = videoSourceRect(v), c = document.createElement('canvas'); c.width = Math.max(1, Math.round(r.sw)); c.height = Math.max(1, Math.round(r.sh)); c.getContext('2d').drawImage(v, r.sx, r.sy, r.sw, r.sh, 0, 0, c.width, c.height); const live = state.liveDetection && performance.now() - state.liveDetection.at <= 1100 ? { corners: state.liveDetection.corners.map(p => ({ ...p })), confidence: state.liveDetection.confidence } : null; let print = null; if (live) { const small = document.createElement('canvas'), s = Math.min(1, 360 / Math.max(c.width, c.height)); small.width = Math.max(1, Math.round(c.width * s)); small.height = Math.max(1, Math.round(c.height * s)); small.getContext('2d').drawImage(c, 0, 0, small.width, small.height); print = pageFingerprint(small, live.corners.map(p => ({ x: p.x * small.width, y: p.y * small.height }))) } const result = await openEditorFromSource(c, 'camera', live), a = state.auto; a.holdStart = 0; a.lastCorners = null; a.needChange = result !== 'retake'; a.capturedCorners = live?.corners || null; a.capturedPrint = print; a.armedAt = performance.now() + (result === 'retake' ? 1400 : 900) }
+      async function captureFrame() { if (state.editor || state.importQueue) return; if (!state.procedureActive) { status(t('procedureIdle'), 4200); return } const v = $('#video'); if (!state.stream || v.readyState < 2) return; const r = videoSourceRect(v), c = document.createElement('canvas'); c.width = Math.max(1, Math.round(r.sw)); c.height = Math.max(1, Math.round(r.sh)); c.getContext('2d').drawImage(v, r.sx, r.sy, r.sw, r.sh, 0, 0, c.width, c.height); const live = state.liveDetection && performance.now() - state.liveDetection.at <= 1100 ? { corners: state.liveDetection.corners.map(p => ({ ...p })), confidence: state.liveDetection.confidence } : null; let print = null; if (live) { const small = analyzeVideoFrame.canvas; if (small?.width) print = pageFingerprint(small, live.corners.map(p => ({ x: p.x * small.width, y: p.y * small.height }))) } const result = await openEditorFromSource(c, 'camera', live), a = state.auto; a.holdStart = 0; a.lastCorners = null; a.needChange = result !== 'retake'; a.capturedCorners = live?.corners || null; a.capturedPrint = print; a.armedAt = performance.now() + (result === 'retake' ? 1400 : 900) }
       async function importFiles(files) {
         if (state.importQueue || state.editor) return;
         const arr = [...files].slice(0, 30); $('#fileInput').value = ''; if (!arr.length) return;
@@ -3560,8 +3582,8 @@
         } finally { if (state.importQueue === queue) { state.importQueue = null; busy(false) } }
       }
       async function canvasFromBlob(blob) { const bm = await fileToBitmap(blob), c = document.createElement('canvas'); c.width = bm.width; c.height = bm.height; c.getContext('2d').drawImage(bm, 0, 0); bm.close?.(); return c }
-      async function openEditorFromSource(source, label, detectionHint = null) { let corners, confidence; if (detectionHint?.corners?.length === 4 && detectionHint.corners.every(p => Number.isFinite(p.x) && Number.isFinite(p.y))) { corners = detectionHint.corners.map(p => ({ x: clamp(p.x, 0, 1) * source.width, y: clamp(p.y, 0, 1) * source.height })); confidence = clamp(+detectionHint.confidence || 0, 0, 1) } else { const detCanvas = document.createElement('canvas'), max = 520, s = Math.min(1, max / Math.max(source.width, source.height)); detCanvas.width = Math.max(1, Math.round(source.width * s)); detCanvas.height = Math.max(1, Math.round(source.height * s)); detCanvas.getContext('2d').drawImage(source, 0, 0, detCanvas.width, detCanvas.height); const det = detectPage(detCanvas); corners = det.corners.map(p => ({ x: p.x / s, y: p.y / s })); confidence = det.confidence } state.editor = { source, sourceBlob: null, label, corners, originalCorners: corners.map(p => ({ ...p })), filter: 'auto', confidence, mode: 'add', pageId: null, rotation: 0, autoPortrait: state.autoPortrait, cleanEdges: state.cleanEdges, view: confidence > .5 ? 'preview' : 'corners', editorZoom: 1, editorPanX: 0, editorPanY: 0 }; return await showEditor() }
-      async function openEditorFromPage(page) { busy(true, t('processing')); try { let source; if (page.sourceBlob) source = await canvasFromBlob(page.sourceBlob); else { source = document.createElement('canvas'); source.width = page.canvas.width; source.height = page.canvas.height; source.getContext('2d').drawImage(page.canvas, 0, 0) } const corners = page.corners?.map(p => ({ ...p })) || defaultCorners(source.width, source.height, 0); state.editor = { source, sourceBlob: page.sourceBlob || null, label: page.label || '', corners, originalCorners: corners.map(p => ({ ...p })), filter: page.filter || 'none', confidence: page.confidence || .9, mode: 'edit', pageId: page.id, rotation: page.rotation || 0, cleanEdges: page.cleanEdges ?? state.cleanEdges, view: 'preview', editorZoom: 1, editorPanX: 0, editorPanY: 0 }; busy(false); return await showEditor() } catch (e) { console.warn(e); busy(false); status(t('fileUnsupported')) } }
+      async function openEditorFromSource(source, label, detectionHint = null) { let corners, confidence; if (detectionHint?.corners?.length === 4 && detectionHint.corners.every(p => Number.isFinite(p.x) && Number.isFinite(p.y))) { corners = detectionHint.corners.map(p => ({ x: clamp(p.x, 0, 1) * source.width, y: clamp(p.y, 0, 1) * source.height })); confidence = clamp(+detectionHint.confidence || 0, 0, 1) } else { const detCanvas = document.createElement('canvas'), max = 520, s = Math.min(1, max / Math.max(source.width, source.height)); detCanvas.width = Math.max(1, Math.round(source.width * s)); detCanvas.height = Math.max(1, Math.round(source.height * s)); detCanvas.getContext('2d', { willReadFrequently: true }).drawImage(source, 0, 0, detCanvas.width, detCanvas.height); const det = detectPage(detCanvas); corners = det.corners.map(p => ({ x: p.x / s, y: p.y / s })); confidence = det.confidence } state.editor = { source, sourceBlob: null, label, corners, originalCorners: corners.map(p => ({ ...p })), filter: 'auto', confidence, mode: 'add', pageId: null, rotation: 0, autoPortrait: state.autoPortrait, cleanEdges: state.cleanEdges, view: confidence > .5 ? 'preview' : 'corners', editorZoom: 1, editorPanX: 0, editorPanY: 0 }; return await showEditor() }
+      async function openEditorFromPage(page) { busy(true, t('processing')); try { page.sourceBlob?.start?.(); page.jpeg?.start?.(); const sourceBlob = await page.sourceBlob, source = await canvasFromBlob(sourceBlob || await page.jpeg), corners = page.corners?.map(p => ({ ...p })) || defaultCorners(source.width, source.height, 0); state.editor = { source, sourceBlob: sourceBlob || null, label: page.label || '', corners, originalCorners: corners.map(p => ({ ...p })), filter: page.filter || 'none', confidence: page.confidence || .9, mode: 'edit', pageId: page.id, rotation: page.rotation || 0, cleanEdges: page.cleanEdges ?? state.cleanEdges, view: 'preview', editorZoom: 1, editorPanX: 0, editorPanY: 0 }; busy(false); return await showEditor() } catch (e) { console.warn(e); busy(false); status(t('fileUnsupported')) } }
       function showEditor() { const ed = state.editor; if (!ed) return Promise.resolve('cancel'); syncEditorUi(); return new Promise(resolve => { state.editorResolve = resolve; $('#editorDialog').showModal(); requestAnimationFrame(renderEditor) }) }
       function syncEditorUi() {
         const ed = state.editor; if (!ed) return;
@@ -3596,24 +3618,41 @@
       // with the measured paper color. Background color is sampled just outside the page outline in the source photo;
       // only regions that touch the page border, stay within the edge band and match that color are replaced.
       function edgeSample(ed) { if (ed._sample) return ed._sample; const src = ed.source, s = Math.min(1, 480 / Math.max(src.width, src.height)), c = document.createElement('canvas'); c.width = Math.max(1, Math.round(src.width * s)); c.height = Math.max(1, Math.round(src.height * s)); const ctx = c.getContext('2d', { willReadFrequently: true }); ctx.drawImage(src, 0, 0, c.width, c.height); ed._sample = { s, w: c.width, h: c.height, data: ctx.getImageData(0, 0, c.width, c.height).data }; return ed._sample }
-      function medianColor(list) { if (!list.length) return null; const m = k => { const v = list.map(p => p[k]).sort((a, b) => a - b); return v[v.length >> 1] }; return [m(0), m(1), m(2)] }
+      // Per-channel median of 0–255 colors, counted in histograms instead of sorting (lists can hold tens of thousands).
+      function medianColor(list) { if (!list.length) return null; const hist = [new Uint32Array(256), new Uint32Array(256), new Uint32Array(256)], mid = list.length >> 1; for (const p of list) for (let k = 0; k < 3; k++)hist[k][clamp(Math.round(p[k]), 0, 255)]++; return hist.map(h => { let c = 0; for (let v = 0; v < 256; v++) { c += h[v]; if (c > mid) return v } return 255 }) }
       function backgroundColor(ed) { const sm = edgeSample(ed), q = ed.corners.map(p => ({ x: p.x * sm.s, y: p.y * sm.s })), cx = q.reduce((n, p) => n + p.x, 0) / 4, cy = q.reduce((n, p) => n + p.y, 0) / 4, off = Math.hypot(sm.w, sm.h) * .025, out = []; for (let i = 0; i < 4; i++) { const a = q[i], b = q[(i + 1) % 4], len = Math.hypot(b.x - a.x, b.y - a.y) || 1; let nx = -(b.y - a.y) / len, ny = (b.x - a.x) / len; for (let t = .08; t < .95; t += .06) { const x = a.x + (b.x - a.x) * t, y = a.y + (b.y - a.y) * t; if (nx * (cx - x) + ny * (cy - y) > 0) { nx = -nx; ny = -ny } const px = Math.round(x + nx * off), py = Math.round(y + ny * off); if (px < 0 || py < 0 || px >= sm.w || py >= sm.h) continue; const k = (py * sm.w + px) * 4; out.push([sm.data[k], sm.data[k + 1], sm.data[k + 2]]) } } return out.length >= 6 ? medianColor(out) : null }
+      // Mask of background regions on a small copy (about 420 px) of the corrected page, or null when nothing to clean.
+      function edgeCleanupMask(d, w, h, bg) {
+        // Squared color distances: Math.hypot is slow in the flood fill's inner loop.
+        const n = w * h, dist2 = (i, c) => { const r = d[i] - c[0], g = d[i + 1] - c[1], b = d[i + 2] - c[2]; return r * r + g * g + b * b };
+        const center = []; for (let y = Math.floor(h * .2); y < h * .8; y += 3)for (let x = Math.floor(w * .2); x < w * .8; x += 3) { const i = (y * w + x) * 4; center.push([d[i], d[i + 1], d[i + 2]]) } const paper = medianColor(center); if (!paper || Math.hypot(paper[0] - bg[0], paper[1] - bg[1], paper[2] - bg[2]) < 45) return null;
+        const bandX = w * .15, bandY = h * .15, inBand = p => { const x = p % w, y = (p - x) / w; return x <= bandX || x >= w - 1 - bandX || y <= bandY || y >= h - 1 - bandY }, isBg = p => { if (!inBand(p)) return false; const i = p * 4, db = dist2(i, bg); return db < 4900 && db < dist2(i, paper) * .64 };
+        const mask = new Uint8Array(n), stack = new Int32Array(n); let top = 0; const push = p => { if (!mask[p] && isBg(p)) { mask[p] = 1; stack[top++] = p } }; for (let x = 0; x < w; x++) { push(x); push((h - 1) * w + x) } for (let y = 0; y < h; y++) { push(y * w); push(y * w + w - 1) } while (top) { const p = stack[--top], x = p % w; if (x > 0) push(p - 1); if (x < w - 1) push(p + 1); if (p >= w) push(p - w); if (p < n - w) push(p + w) }
+        let count = 0; for (let p = 0; p < n; p++)count += mask[p]; if (!count || count > n * .3) return null;
+        const near = []; for (let p = 0; p < n; p += 2) { if (mask[p] || !inBand(p)) continue; const i = p * 4; if (dist2(i, paper) < 1600) near.push([d[i], d[i + 1], d[i + 2]]) } const fill = medianColor(near) || paper;
+        // Grow by one cell to cover the shadow fringe along the fold; callers paint it at full size with soft edges.
+        const grown = new Uint8Array(mask); for (let p = 0; p < n; p++) { if (!mask[p]) continue; const x = p % w; if (x > 0) grown[p - 1] = 1; if (x < w - 1) grown[p + 1] = 1; if (p >= w) grown[p - w] = 1; if (p < n - w) grown[p + w] = 1 }
+        return { w, h, grown, fill };
+      }
       function cleanPageEdges(canvas, ed) {
         const bg = backgroundColor(ed); if (!bg) return canvas;
-        const W = canvas.width, H = canvas.height, s = Math.min(1, 420 / Math.max(W, H)), w = Math.max(8, Math.round(W * s)), h = Math.max(8, Math.round(H * s)), small = document.createElement('canvas'); small.width = w; small.height = h; const sctx = small.getContext('2d', { willReadFrequently: true }); sctx.drawImage(canvas, 0, 0, w, h); const d = sctx.getImageData(0, 0, w, h).data, n = w * h, dist = (i, c) => Math.hypot(d[i] - c[0], d[i + 1] - c[1], d[i + 2] - c[2]);
-        const center = []; for (let y = Math.floor(h * .2); y < h * .8; y += 3)for (let x = Math.floor(w * .2); x < w * .8; x += 3) { const i = (y * w + x) * 4; center.push([d[i], d[i + 1], d[i + 2]]) } const paper = medianColor(center); if (!paper || Math.hypot(paper[0] - bg[0], paper[1] - bg[1], paper[2] - bg[2]) < 45) return canvas;
-        const bandX = w * .15, bandY = h * .15, inBand = p => { const x = p % w, y = (p - x) / w; return x <= bandX || x >= w - 1 - bandX || y <= bandY || y >= h - 1 - bandY }, isBg = p => { if (!inBand(p)) return false; const i = p * 4, db = dist(i, bg); return db < 70 && db < dist(i, paper) * .8 };
-        const mask = new Uint8Array(n), stack = new Int32Array(n); let top = 0; const push = p => { if (!mask[p] && isBg(p)) { mask[p] = 1; stack[top++] = p } }; for (let x = 0; x < w; x++) { push(x); push((h - 1) * w + x) } for (let y = 0; y < h; y++) { push(y * w); push(y * w + w - 1) } while (top) { const p = stack[--top], x = p % w; if (x > 0) push(p - 1); if (x < w - 1) push(p + 1); if (p >= w) push(p - w); if (p < n - w) push(p + w) }
-        let count = 0; for (let p = 0; p < n; p++)count += mask[p]; if (!count || count > n * .3) return canvas;
-        const near = []; for (let p = 0; p < n; p += 2) { if (mask[p] || !inBand(p)) continue; const i = p * 4; if (dist(i, paper) < 40) near.push([d[i], d[i + 1], d[i + 2]]) } const fill = medianColor(near) || paper;
-        // Grow by one cell to cover the shadow fringe along the fold, then paint at full size with soft edges.
-        const grown = new Uint8Array(mask); for (let p = 0; p < n; p++) { if (!mask[p]) continue; const x = p % w; if (x > 0) grown[p - 1] = 1; if (x < w - 1) grown[p + 1] = 1; if (p >= w) grown[p - w] = 1; if (p < n - w) grown[p + w] = 1 }
-        const m = sctx.createImageData(w, h); for (let p = 0; p < n; p++)if (grown[p]) { const i = p * 4; m.data[i] = fill[0]; m.data[i + 1] = fill[1]; m.data[i + 2] = fill[2]; m.data[i + 3] = 255 } const mc = document.createElement('canvas'); mc.width = w; mc.height = h; mc.getContext('2d').putImageData(m, 0, 0);
+        const W = canvas.width, H = canvas.height, s = Math.min(1, 420 / Math.max(W, H)), w = Math.max(8, Math.round(W * s)), h = Math.max(8, Math.round(H * s)), small = document.createElement('canvas'); small.width = w; small.height = h; const sctx = small.getContext('2d', { willReadFrequently: true }); sctx.drawImage(canvas, 0, 0, w, h);
+        const cleanup = edgeCleanupMask(sctx.getImageData(0, 0, w, h).data, w, h, bg); if (!cleanup) return canvas; const { grown, fill } = cleanup;
+        const m = sctx.createImageData(w, h); for (let p = 0; p < w * h; p++)if (grown[p]) { const i = p * 4; m.data[i] = fill[0]; m.data[i + 1] = fill[1]; m.data[i + 2] = fill[2]; m.data[i + 3] = 255 } const mc = document.createElement('canvas'); mc.width = w; mc.height = h; mc.getContext('2d').putImageData(m, 0, 0);
         const out = document.createElement('canvas'); out.width = W; out.height = H; const octx = out.getContext('2d'); octx.drawImage(canvas, 0, 0); octx.imageSmoothingEnabled = true; octx.imageSmoothingQuality = 'high'; octx.drawImage(mc, 0, 0, W, H); return out
       }
       // One clockwise quarter turn when auto-portrait is on and the corrected page is wider than tall.
       function autoQuarter(ed) { if (!ed.autoPortrait) return 0; const d = cornerDimensions(ed.corners); return d.w > d.h * 1.02 ? 1 : 0 }
-      function editorOutput(ed, maxLong = 1800) { let out = warpPerspective(ed.source, ed.corners, maxLong); if (ed.cleanEdges) out = cleanPageEdges(out, ed); out = applyFilter(out, ed.filter); const turns = ((ed.rotation || 0) + autoQuarter(ed)) % 4; for (let i = 0; i < turns; i++)out = rotateCanvas(out); return out }
+      const PAGE_MAX_LONG = 2400, PAGE_QUALITY = .82;
+      function editorOutput(ed, maxLong = PAGE_MAX_LONG) {
+        try { const out = renderPageGpu(ed, maxLong); if (out) return out } catch (e) { console.warn('WebGL render fallback', e); gpu.failed = true }
+        let out = warpCanvas(ed.source, ed.corners, maxLong); if (ed.cleanEdges) out = cleanPageEdges(out, ed); out = applyFilter(out, ed.filter); const turns = ((ed.rotation || 0) + autoQuarter(ed)) % 4; for (let i = 0; i < turns; i++)out = rotateCanvas(out); return out
+      }
+      // Preview renders at the size it is shown; the full-size page is rendered once in the background and reused on save.
+      function outputKey(ed) { return JSON.stringify([ed.corners, ed.filter, ed.rotation || 0, autoQuarter(ed), !!ed.cleanEdges]) }
+      function previewOutput(ed, maxLong) { const key = outputKey(ed) + maxLong; if (ed._preview?.key !== key) ed._preview = { key, canvas: editorOutput(ed, maxLong) }; return ed._preview.canvas }
+      function fullOutput(ed) { const key = outputKey(ed); if (ed._full?.key !== key) ed._full = { key, canvas: editorOutput(ed, PAGE_MAX_LONG) }; return ed._full.canvas }
+      function prepareFullOutput(ed) { clearTimeout(ed._fullTimer); ed._fullTimer = setTimeout(() => { if (state.editor === ed && !ed.saving) fullOutput(ed) }, 150) }
       function clampEditorPan(ed, stageW, stageH, canvasW, canvasH) {
         const overflowX = Math.max(0, (canvasW - stageW) / 2 + 18), overflowY = Math.max(0, (canvasH - stageH) / 2 + 18);
         ed.editorPanX = clamp(ed.editorPanX || 0, -overflowX, overflowX); ed.editorPanY = clamp(ed.editorPanY || 0, -overflowY, overflowY);
@@ -3631,7 +3670,7 @@
         const stage = $('#cropStage'), canvas = $('#cropCanvas'), rect = stage.getBoundingClientRect(), maxW = Math.max(260, rect.width - 20), maxH = Math.max(260, rect.height - 20), ctx = canvas.getContext('2d');
         if (ed.view === 'preview') {
           canvas.style.setProperty('--editor-pan-x', '0px'); canvas.style.setProperty('--editor-pan-y', '0px'); canvas.style.transform = 'translate(0px,0px)';
-          const out = editorOutput(ed, 1600), scale = Math.min(maxW / out.width, maxH / out.height, 1); canvas.width = Math.max(1, Math.round(out.width * scale)); canvas.height = Math.max(1, Math.round(out.height * scale)); canvas.style.width = canvas.width + 'px'; canvas.style.height = canvas.height + 'px'; ctx.drawImage(out, 0, 0, canvas.width, canvas.height); return;
+          const dpr = Math.min(2, devicePixelRatio || 1), out = previewOutput(ed, Math.min(1600, Math.ceil(Math.max(maxW, maxH) * dpr))), scale = Math.min(maxW / out.width, maxH / out.height, 1), cw = Math.max(1, Math.round(out.width * scale)), ch = Math.max(1, Math.round(out.height * scale)); canvas.width = Math.max(1, Math.min(out.width, Math.round(cw * dpr))); canvas.height = Math.max(1, Math.min(out.height, Math.round(ch * dpr))); canvas.style.width = cw + 'px'; canvas.style.height = ch + 'px'; ctx.drawImage(out, 0, 0, canvas.width, canvas.height); prepareFullOutput(ed); return;
         }
         const baseScale = Math.min(maxW / ed.source.width, maxH / ed.source.height, 1), scale = baseScale * (ed.editorZoom || 1), cw = Math.max(1, Math.round(ed.source.width * scale)), ch = Math.max(1, Math.round(ed.source.height * scale));
         clampEditorPan(ed, rect.width, rect.height, cw, ch); canvas.width = cw; canvas.height = ch; canvas.style.width = cw + 'px'; canvas.style.height = ch + 'px'; canvas.style.transform = `translate(${ed.editorPanX || 0}px,${ed.editorPanY || 0}px)`; ctx.drawImage(ed.source, 0, 0, cw, ch);
@@ -3649,37 +3688,154 @@
       function cornerDimensions(c) { const top = Math.hypot(c[1].x - c[0].x, c[1].y - c[0].y), bottom = Math.hypot(c[2].x - c[3].x, c[2].y - c[3].y), left = Math.hypot(c[3].x - c[0].x, c[3].y - c[0].y), right = Math.hypot(c[2].x - c[1].x, c[2].y - c[1].y); return { w: (top + bottom) / 2, h: (left + right) / 2 } }
       function solveLinear(A, b) { const n = b.length; for (let i = 0; i < n; i++) { let m = i; for (let r = i + 1; r < n; r++)if (Math.abs(A[r][i]) > Math.abs(A[m][i])) m = r;[A[i], A[m]] = [A[m], A[i]];[b[i], b[m]] = [b[m], b[i]]; const p = A[i][i]; if (Math.abs(p) < 1e-10) throw new Error('singular'); for (let j = i; j < n; j++)A[i][j] /= p; b[i] /= p; for (let r = 0; r < n; r++)if (r !== i) { const f = A[r][i]; for (let j = i; j < n; j++)A[r][j] -= f * A[i][j]; b[r] -= f * b[i] } } return b }
       function homographyFromUnitToQuad(q, w, h) { const pts = q.map(p => ({ x: p.x / w, y: p.y / h })), uv = [[0, 0], [1, 0], [1, 1], [0, 1]], A = [], b = []; for (let i = 0; i < 4; i++) { const u = uv[i][0], v = uv[i][1], x = pts[i].x, y = pts[i].y; A.push([u, v, 1, 0, 0, 0, -u * x, -v * x]); b.push(x); A.push([0, 0, 0, u, v, 1, -u * y, -v * y]); b.push(y) } const h8 = solveLinear(A, b); return [h8[0], h8[3], h8[6], h8[1], h8[4], h8[7], h8[2], h8[5], 1] }
-      function warpWebGL(source, corners, maxLong = 2400) { const dim = cornerDimensions(corners), scale = Math.min(1, maxLong / Math.max(dim.w, dim.h)), ow = Math.max(1, Math.round(dim.w * scale)), oh = Math.max(1, Math.round(dim.h * scale)), canvas = document.createElement('canvas'); canvas.width = ow; canvas.height = oh; const gl = canvas.getContext('webgl', { preserveDrawingBuffer: true, alpha: false }); if (!gl) return null; const vs = 'attribute vec2 a;varying vec2 v;void main(){v=(a+1.0)*0.5;gl_Position=vec4(a,0,1);}'; const fs = 'precision mediump float;varying vec2 v;uniform sampler2D tex;uniform mat3 H;void main(){vec2 q=vec2(v.x,1.0-v.y);vec3 p=H*vec3(q,1.0);vec2 uv=p.xy/p.z;gl_FragColor=texture2D(tex,vec2(uv.x,1.0-uv.y));}'; const sh = (type, src) => { const s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s); if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(s)); return s }, prog = gl.createProgram(); gl.attachShader(prog, sh(gl.VERTEX_SHADER, vs)); gl.attachShader(prog, sh(gl.FRAGMENT_SHADER, fs)); gl.linkProgram(prog); gl.useProgram(prog); const buf = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, buf); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, -1, 1, 1, -1, 1, 1]), gl.STATIC_DRAW); const loc = gl.getAttribLocation(prog, 'a'); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0); const tex = gl.createTexture(); gl.bindTexture(gl.TEXTURE_2D, tex); gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR); gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, source); const H = homographyFromUnitToQuad(corners, source.width, source.height); gl.uniformMatrix3fv(gl.getUniformLocation(prog, 'H'), false, new Float32Array(H)); gl.viewport(0, 0, ow, oh); gl.drawArrays(gl.TRIANGLES, 0, 6); return canvas }
+      // Page rendering on the GPU: perspective warp, edge cleanup, filter and rotation in one pass on one shared WebGL
+      // context. Settings that need the whole page (cleanup mask, filter statistics) are measured once on small copies.
+      // Without WebGL, editorOutput falls back to the canvas path (warpCanvas, cleanPageEdges, applyFilter).
+      const gpu = { gl: null, failed: false, u: {}, src: null };
+      const GPU_FS = `uniform sampler2D src, maskTex, gridTex; uniform mat3 H; uniform vec2 origin, outSize, gridSize; uniform int taps, turns, mode; uniform float useMask, gain, offs, gGain, gOff, gStr, lStr, chroma, whiten; uniform vec3 fill;
+vec2 pageUV(vec2 o) { if (turns == 1) return vec2(o.y, 1.0 - o.x); if (turns == 2) return vec2(1.0 - o.x, 1.0 - o.y); if (turns == 3) return vec2(1.0 - o.y, o.x); return o; }
+vec3 warpAt(vec2 uv) { vec3 p = H * vec3(uv, 1.0); vec2 s = p.xy / p.z; return texture2D(src, vec2(s.x, 1.0 - s.y)).rgb; }
+float tone(float v, float lg) { float l = v * lg; float g = clamp(l * gGain + gOff, 0.0, 255.0); return l + (g - l) * gStr; }
+void main() {
+  vec2 px = vec2(gl_FragCoord.x - origin.x - 0.5, outSize.y - (gl_FragCoord.y - origin.y) - 0.5); vec3 c = vec3(0.0);
+  for (int j = 0; j < 4; j++) { if (j >= taps) break; for (int i = 0; i < 4; i++) { if (i >= taps) break; c += warpAt(pageUV((px + (vec2(float(i), float(j)) + 0.5) / float(taps)) / outSize)); } }
+  c = c / float(taps * taps) * 255.0; vec2 uv = pageUV((px + 0.5) / outSize);
+  float m = useMask > 0.5 ? texture2D(maskTex, uv).a : 0.0; c = mix(c, fill, m);
+  float lum = dot(c, vec3(0.299, 0.587, 0.114));
+  if (mode == 1) c = c * gain + offs;
+  else if (mode == 2) {
+    float paper = texture2D(gridTex, (uv * (gridSize - 1.0) + 0.5) / gridSize).r * 255.0, lg = 1.0 + (clamp(238.0 / max(155.0, paper), 0.94, 1.24) - 1.0) * lStr;
+    float mx = max(c.r, max(c.g, c.b)), sat = mx > 0.0 ? (mx - min(c.r, min(c.g, c.b))) / mx : 0.0, ny = clamp(tone(lum, lg), 0.0, 248.0), tp = tone(paper, lg);
+    float w = max(whiten * smoothstep(tp - 30.0, tp - 8.0, ny) * (1.0 - smoothstep(0.12, 0.25, sat)), whiten * m);
+    c = vec3(ny + (255.0 - ny) * w) + (c - lum) * chroma * (1.0 - w);
+  } else if (mode == 3) c = vec3((lum - 18.0) * 1.16 + 18.0);
+  else if (mode == 4) c = vec3(lum > 165.0 ? 255.0 : lum > 115.0 ? (lum - 115.0) * 5.1 : 0.0);
+  gl_FragColor = vec4(clamp(c, 0.0, 255.0) / 255.0, 1.0);
+}`;
+      function gpuContext() {
+        if (gpu.failed) return null; if (gpu.gl && !gpu.gl.isContextLost()) return gpu.gl;
+        const canvas = document.createElement('canvas'), gl = canvas.getContext('webgl', { preserveDrawingBuffer: true, alpha: false, antialias: false, depth: false }); if (!gl) { gpu.failed = true; return null }
+        canvas.addEventListener('webglcontextlost', e => { e.preventDefault(); gpu.gl = null; gpu.src = null });
+        const precision = gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.HIGH_FLOAT)?.precision > 0 ? 'highp' : 'mediump';
+        const sh = (type, src) => { const s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s); if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(s)); return s }, prog = gl.createProgram();
+        gl.attachShader(prog, sh(gl.VERTEX_SHADER, 'attribute vec2 a;void main(){gl_Position=vec4(a,0.0,1.0);}')); gl.attachShader(prog, sh(gl.FRAGMENT_SHADER, `precision ${precision} float;\n${GPU_FS}`)); gl.linkProgram(prog); if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(prog)); gl.useProgram(prog);
+        const buf = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, buf); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, -1, 1, 1, -1, 1, 1]), gl.STATIC_DRAW); const loc = gl.getAttribLocation(prog, 'a'); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+        const u = {}; for (const name of ['src', 'maskTex', 'gridTex', 'H', 'origin', 'outSize', 'gridSize', 'taps', 'turns', 'mode', 'useMask', 'gain', 'offs', 'gGain', 'gOff', 'gStr', 'lStr', 'chroma', 'whiten', 'fill']) u[name] = gl.getUniformLocation(prog, name);
+        const texture = (unit, format) => { const t = gl.createTexture(); gl.activeTexture(gl.TEXTURE0 + unit); gl.bindTexture(gl.TEXTURE_2D, t); for (const [k, v] of [[gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE], [gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE], [gl.TEXTURE_MIN_FILTER, gl.LINEAR], [gl.TEXTURE_MAG_FILTER, gl.LINEAR]]) gl.texParameteri(gl.TEXTURE_2D, k, v); gl.texImage2D(gl.TEXTURE_2D, 0, format, 1, 1, 0, format, gl.UNSIGNED_BYTE, new Uint8Array(format === gl.RGBA ? 4 : 1)); return t };
+        texture(0, gl.RGBA); texture(1, gl.ALPHA); texture(2, gl.LUMINANCE); gl.uniform1i(u.src, 0); gl.uniform1i(u.maskTex, 1); gl.uniform1i(u.gridTex, 2);
+        // Fixed-size drawing buffer: renders use its bottom-left corner, because resizing the canvas makes the GPU stall.
+        canvas.width = canvas.height = PAGE_MAX_LONG; Object.assign(gpu, { gl, u, src: null, maxTexture: gl.getParameter(gl.MAX_TEXTURE_SIZE) }); return gl;
+      }
+      function gpuUpload(gl, unit, format, w, h, data, flipY = false) { gl.activeTexture(gl.TEXTURE0 + unit); gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, flipY); gl.pixelStorei(gl.UNPACK_ALIGNMENT, 1); if (w == null) gl.texImage2D(gl.TEXTURE_2D, 0, format, format, gl.UNSIGNED_BYTE, data); else gl.texImage2D(gl.TEXTURE_2D, 0, format, w, h, 0, format, gl.UNSIGNED_BYTE, data); gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, false) }
+      // The source photo stays on the GPU while its editor is open; corner moves and filter changes reuse it.
+      function gpuSource(gl, source) {
+        if (gpu.src === source) return; let img = source; const max = gpu.maxTexture || 4096;
+        if (Math.max(source.width, source.height) > max) { const s = max / Math.max(source.width, source.height); img = document.createElement('canvas'); img.width = Math.max(1, Math.floor(source.width * s)); img.height = Math.max(1, Math.floor(source.height * s)); img.getContext('2d').drawImage(source, 0, 0, img.width, img.height) }
+        gpuUpload(gl, 0, gl.RGBA, null, null, img, true); gpu.src = source;
+      }
+      function releaseGpuSource() { const gl = gpu.gl; gpu.src = null; if (gl && !gl.isContextLost()) gpuUpload(gl, 0, gl.RGBA, 1, 1, new Uint8Array(4)) }
+      function gpuDraw(gl, ed, w, h, { turns = 0, taps = 1, mask = null, params = null, x0 = 0 } = {}) {
+        gpuSource(gl, ed.source); const u = gpu.u; gl.viewport(x0, 0, w, h); gl.uniform2f(u.origin, x0, 0);
+        gl.uniformMatrix3fv(u.H, false, new Float32Array(homographyFromUnitToQuad(ed.corners, ed.source.width, ed.source.height))); gl.uniform2f(u.outSize, w, h); gl.uniform1i(u.taps, taps); gl.uniform1i(u.turns, turns);
+        gl.uniform1f(u.useMask, mask ? 1 : 0); if (mask) { gpuUpload(gl, 1, gl.ALPHA, mask.w, mask.h, mask.alpha); gl.uniform3f(u.fill, mask.fill[0], mask.fill[1], mask.fill[2]) }
+        const mode = { color: 1, auto: 2, gray: 3, bw: 4 }[params?.filter] || 0; gl.uniform1i(u.mode, mode);
+        if (mode === 1) { gl.uniform1f(u.gain, params.gain); gl.uniform1f(u.offs, params.offset) }
+        if (mode === 2) { gpuUpload(gl, 2, gl.LUMINANCE, params.cols, params.rows, Uint8Array.from(params.grid, v => Math.round(clamp(v, 0, 255)))); gl.uniform2f(u.gridSize, params.cols, params.rows); gl.uniform1f(u.gGain, params.globalGain); gl.uniform1f(u.gOff, params.globalOffset); gl.uniform1f(u.gStr, params.globalStrength); gl.uniform1f(u.lStr, params.localStrength); gl.uniform1f(u.chroma, params.chromaScale); gl.uniform1f(u.whiten, params.whiten) }
+        gl.drawArrays(gl.TRIANGLES, 0, 6);
+      }
+      // Read the w×h block at x0 along the bottom edge of the drawing buffer, as top-down RGBA rows.
+      function gpuRead(gl, w, h, x0 = 0) { const raw = new Uint8Array(w * h * 4), out = new Uint8ClampedArray(w * h * 4), row = w * 4; gl.readPixels(x0, 0, w, h, gl.RGBA, gl.UNSIGNED_BYTE, raw); for (let y = 0; y < h; y++)out.set(raw.subarray((h - 1 - y) * row, (h - y) * row), y * row); return out }
+      const fitSize = (w, h, max) => { const s = Math.min(1, max / Math.max(w, h)); return [Math.max(1, Math.round(w * s)), Math.max(1, Math.round(h * s))] };
+      // Supersampling taps per axis so a downscaled render averages the source instead of skipping pixels.
+      const gpuTaps = (dim, outLong) => clamp(Math.ceil(Math.max(dim.w, dim.h) / Math.max(1, outLong) - .01), 1, 4);
+      // Box-average RGBA pixels down to tw×th.
+      function downsampleRGBA(d, w, h, tw, th) { const out = new Uint8ClampedArray(tw * th * 4), sx = w / tw, sy = h / th; for (let y = 0; y < th; y++) { const y0 = Math.floor(y * sy), y1 = Math.max(y0 + 1, Math.floor((y + 1) * sy)); for (let x = 0; x < tw; x++) { const x0 = Math.floor(x * sx), x1 = Math.max(x0 + 1, Math.floor((x + 1) * sx)); let r = 0, g = 0, b = 0, n = 0; for (let yy = y0; yy < y1; yy++)for (let xx = x0; xx < x1; xx++) { const i = (yy * w + xx) * 4; r += d[i]; g += d[i + 1]; b += d[i + 2]; n++ } const o = (y * tw + x) * 4; out[o] = r / n; out[o + 1] = g / n; out[o + 2] = b / n; out[o + 3] = 255 } } return out }
+      // Paint the cleanup mask into pixels d (w×h) with the same bilinear soft edge the shader uses.
+      function paintMask(d, w, h, mask) { const { alpha, fill } = mask, mw = mask.w, mh = mask.h; for (let y = 0; y < h; y++) { const fy = clamp((y + .5) * mh / h - .5, 0, mh - 1), y0 = Math.floor(fy), y1 = Math.min(mh - 1, y0 + 1), ty = fy - y0; for (let x = 0; x < w; x++) { const fx = clamp((x + .5) * mw / w - .5, 0, mw - 1), x0 = Math.floor(fx), x1 = Math.min(mw - 1, x0 + 1), tx = fx - x0, a = ((alpha[y0 * mw + x0] * (1 - tx) + alpha[y0 * mw + x1] * tx) * (1 - ty) + (alpha[y1 * mw + x0] * (1 - tx) + alpha[y1 * mw + x1] * tx) * ty) / 255; if (!a) continue; const i = (y * w + x) * 4; d[i] += (fill[0] - d[i]) * a; d[i + 1] += (fill[1] - d[i + 1]) * a; d[i + 2] += (fill[2] - d[i + 2]) * a } } }
+      // One small GPU render read back once: the cleanup mask comes from a 420 px copy, filter statistics from the
+      // cleaned 900 px copy. GPU readbacks are the slow part, so there is only this one per corner position.
+      function pageAnalysis(gl, ed) {
+        const key = JSON.stringify([ed.corners, !!ed.cleanEdges]); if (ed._analysis?.key === key) return ed._analysis;
+        const dim = cornerDimensions(ed.corners), [fw, fh] = fitSize(dim.w, dim.h, PAGE_MAX_LONG), [aw, ah] = fitSize(fw, fh, 900);
+        gpuDraw(gl, ed, aw, ah, { taps: gpuTaps(dim, Math.max(aw, ah)) });
+        // The background-color sample of the whole photo is rendered beside it, so both come back in one readback.
+        const src = ed.source, ss = Math.min(1, 480 / Math.max(src.width, src.height)), sw = Math.max(1, Math.round(src.width * ss)), sh = Math.max(1, Math.round(src.height * ss)), sample = ed.cleanEdges && !ed._sample;
+        if (sample) gpuDraw(gl, { source: src, corners: [{ x: 0, y: 0 }, { x: src.width, y: 0 }, { x: src.width, y: src.height }, { x: 0, y: src.height }] }, sw, sh, { taps: clamp(Math.ceil(1 / ss - .01), 1, 4), x0: aw });
+        const rh = sample ? Math.max(ah, sh) : ah, all = gpuRead(gl, sample ? aw + sw : aw, rh); if (gl.isContextLost()) return null;
+        const block = (x, w, h) => { const out = new Uint8ClampedArray(w * h * 4), row = (sample ? aw + sw : aw) * 4; for (let y = 0; y < h; y++)out.set(all.subarray((rh - h + y) * row + x * 4, (rh - h + y) * row + (x + w) * 4), y * w * 4); return out };
+        const d = block(0, aw, ah); if (sample) ed._sample = { s: ss, w: sw, h: sh, data: block(aw, sw, sh) };
+        const bg = ed.cleanEdges ? backgroundColor(ed) : null; let mask = null;
+        if (bg) { const [w, h] = fitSize(fw, fh, 420).map(v => Math.max(8, v)), m = edgeCleanupMask(downsampleRGBA(d, aw, ah, w, h), w, h, bg); if (m) { mask = { w, h, alpha: Uint8Array.from(m.grown, v => v * 255), fill: m.fill }; paintMask(d, aw, ah, mask) } }
+        return ed._analysis = { key, mask, pixels: d, w: aw, h: ah, params: { auto: filterParams(d, aw, ah, 'auto', fw, fh), color: filterParams(d, aw, ah, 'color', fw, fh) } };
+      }
+      function renderPageGpu(ed, maxLong) {
+        const gl = gpuContext(); if (!gl) return null; const an = pageAnalysis(gl, ed); if (!an) return null;
+        const turns = ((ed.rotation || 0) + autoQuarter(ed)) % 4, dim = cornerDimensions(ed.corners), [pw, ph] = fitSize(dim.w, dim.h, maxLong), [w, h] = turns % 2 ? [ph, pw] : [pw, ph];
+        gpuDraw(gl, ed, w, h, { turns, taps: gpuTaps(dim, Math.max(pw, ph)), mask: an.mask, params: an.params[ed.filter] || { filter: ed.filter } });
+        const out = document.createElement('canvas'); out.width = w; out.height = h; out.getContext('2d').drawImage(gl.canvas, 0, gl.canvas.height - h, w, h, 0, 0, w, h); return gl.isContextLost() ? null : out;
+      }
       function warpCanvas(source, corners, maxLong = 1800) { const dim = cornerDimensions(corners), scale = Math.min(1, maxLong / Math.max(dim.w, dim.h)), ow = Math.max(1, Math.round(dim.w * scale)), oh = Math.max(1, Math.round(dim.h * scale)), out = document.createElement('canvas'); out.width = ow; out.height = oh; const srcCtx = source.getContext('2d', { willReadFrequently: true }), dstCtx = out.getContext('2d', { willReadFrequently: true }), src = srcCtx.getImageData(0, 0, source.width, source.height), dst = dstCtx.createImageData(ow, oh), sd = src.data, dd = dst.data, H = homographyFromUnitToQuad(corners, source.width, source.height), sw = source.width, sh = source.height; for (let y = 0; y < oh; y++) { const v = (y + .5) / oh; for (let x = 0; x < ow; x++) { const u = (x + .5) / ow, den = H[2] * u + H[5] * v + H[8], sx = clamp(Math.floor(((H[0] * u + H[3] * v + H[6]) / den) * sw), 0, sw - 1), sy = clamp(Math.floor(((H[1] * u + H[4] * v + H[7]) / den) * sh), 0, sh - 1), si = (sy * sw + sx) * 4, di = (y * ow + x) * 4; dd[di] = sd[si]; dd[di + 1] = sd[si + 1]; dd[di + 2] = sd[si + 2]; dd[di + 3] = 255 } } dstCtx.putImageData(dst, 0, 0); return out }
-      function warpPerspective(source, corners, maxLong = 2400) { try { return warpWebGL(source, corners, maxLong) || warpCanvas(source, corners, maxLong) } catch (e) { console.warn('WebGL warp fallback', e); return warpCanvas(source, corners, maxLong) } }
+      // Filter settings measured on page pixels d (w×h). For 'auto' the paper-brightness grid is laid out for the full
+      // page size fw×fh, so a small analysis copy and the full page get the same settings.
+      function filterParams(d, w, h, filter, fw = w, fh = h) {
+        if (filter === 'color') {
+          const hist = new Uint32Array(256); for (let i = 0; i < d.length; i += 16) { const y = Math.round(.299 * d[i] + .587 * d[i + 1] + .114 * d[i + 2]); hist[y]++ } const total = hist.reduce((a, b) => a + b, 0); let cum = 0, p05 = 12, p96 = 244; for (let i = 0; i < 256; i++) { cum += hist[i]; if (cum >= total * .05) { p05 = i; break } } cum = 0; for (let i = 0; i < 256; i++) { cum += hist[i]; if (cum >= total * .96) { p96 = i; break } } const gain = clamp(220 / Math.max(100, p96 - p05), .94, 1.14), offset = clamp(17 - p05 * gain, -12, 20); return { filter, gain, offset };
+        }
+        if (filter !== 'auto') return { filter };
+        const hist = new Uint32Array(256); let samples = 0, brightNeutral = 0, satSum = 0;
+        const sampleStep = Math.max(1, Math.floor(Math.sqrt((w * h) / 7000)));
+        for (let y = 0; y < h; y += sampleStep)for (let x = 0; x < w; x += sampleStep) { const i = (y * w + x) * 4, r = d[i], g = d[i + 1], b = d[i + 2], lum = .299 * r + .587 * g + .114 * b, maxc = Math.max(r, g, b), minc = Math.min(r, g, b), sat = maxc ? ((maxc - minc) / maxc) : 0; hist[Math.round(lum)]++; samples++; satSum += sat; if (lum > 178 && sat < .18) brightNeutral++ }
+        const percentile = q => { let c = 0, target = samples * q; for (let i = 0; i < 256; i++) { c += hist[i]; if (c >= target) return i } return 255 };
+        const p05 = percentile(.05), p98 = percentile(.98), neutralRatio = brightNeutral / Math.max(1, samples), avgSat = satSum / Math.max(1, samples), paperLike = clamp((neutralRatio - .12) / .46, 0, 1) * clamp((.42 - avgSat) / .3, 0, 1);
+        const block = Math.max(56, Math.round(Math.min(fw, fh) / 10)), cols = Math.max(2, Math.ceil(fw / block) + 1), rows = Math.max(2, Math.ceil(fh / block) + 1), grid = new Float32Array(cols * rows), f = w / fw, half0 = Math.floor(block / 2) * f, half1 = Math.ceil(block / 2) * f, step = Math.max(1, Math.round(Math.max(3, Math.floor(block / 12)) * f));
+        for (let gy = 0; gy < rows; gy++)for (let gx = 0; gx < cols; gx++) { const cx = Math.round(gx * (w - 1) / (cols - 1)), cy = Math.round(gy * (h - 1) / (rows - 1)), x0 = Math.max(0, Math.round(cx - half0)), x1 = Math.min(w, Math.round(cx + half1)), y0 = Math.max(0, Math.round(cy - half0)), y1 = Math.min(h, Math.round(cy + half1)), vals = []; for (let yy = y0; yy < y1; yy += step)for (let xx = x0; xx < x1; xx += step) { const i = (yy * w + xx) * 4; vals.push(.299 * d[i] + .587 * d[i + 1] + .114 * d[i + 2]) } vals.sort((a, b) => a - b); const top = vals.slice(Math.floor(vals.length * .78)); grid[gy * cols + gx] = top.length ? top.reduce((a, b) => a + b, 0) / top.length : p98 }
+        const globalRange = Math.max(105, p98 - p05), globalGain = clamp(218 / globalRange, .94, 1.14);
+        // whiten: on paper-like pages, pixels near the local paper brightness become pure white (smaller, cleaner JPEG).
+        // The GPU path also whitens filled corners/edges so they match; the canvas fallback keeps the measured fill color.
+        return { filter, cols, rows, grid, globalGain, globalOffset: clamp(16 - p05 * globalGain, -10, 18), globalStrength: .24 + .28 * paperLike, localStrength: .58 * paperLike, chromaScale: .98 - .08 * paperLike, whiten: paperLike };
+      }
+      const smoothstep = (a, b, x) => { const t = clamp((x - a) / (b - a), 0, 1); return t * t * (3 - 2 * t) };
       function applyFilter(canvas, filter) {
         if (filter === 'none') return canvas;
-        const out = document.createElement('canvas'); out.width = canvas.width; out.height = canvas.height; const ctx = out.getContext('2d', { willReadFrequently: true }); ctx.drawImage(canvas, 0, 0); const img = ctx.getImageData(0, 0, out.width, out.height), d = img.data;
-        if (filter === 'color') {
-          const hist = new Uint32Array(256); for (let i = 0; i < d.length; i += 16) { const y = Math.round(.299 * d[i] + .587 * d[i + 1] + .114 * d[i + 2]); hist[y]++ } const total = hist.reduce((a, b) => a + b, 0); let cum = 0, p05 = 12, p96 = 244; for (let i = 0; i < 256; i++) { cum += hist[i]; if (cum >= total * .05) { p05 = i; break } } cum = 0; for (let i = 0; i < 256; i++) { cum += hist[i]; if (cum >= total * .96) { p96 = i; break } } const gain = clamp(220 / Math.max(100, p96 - p05), .94, 1.14), offset = clamp(17 - p05 * gain, -12, 20); for (let i = 0; i < d.length; i += 4) { d[i] = clamp(d[i] * gain + offset, 0, 255); d[i + 1] = clamp(d[i + 1] * gain + offset, 0, 255); d[i + 2] = clamp(d[i + 2] * gain + offset, 0, 255) }
-        } else if (filter === 'auto') {
-          const w = out.width, h = out.height, hist = new Uint32Array(256); let samples = 0, brightNeutral = 0, satSum = 0;
-          const sampleStep = Math.max(1, Math.floor(Math.sqrt((w * h) / 7000)));
-          for (let y = 0; y < h; y += sampleStep)for (let x = 0; x < w; x += sampleStep) { const i = (y * w + x) * 4, r = d[i], g = d[i + 1], b = d[i + 2], lum = .299 * r + .587 * g + .114 * b, maxc = Math.max(r, g, b), minc = Math.min(r, g, b), sat = maxc ? ((maxc - minc) / maxc) : 0; hist[Math.round(lum)]++; samples++; satSum += sat; if (lum > 178 && sat < .18) brightNeutral++ }
-          const percentile = q => { let c = 0, target = samples * q; for (let i = 0; i < 256; i++) { c += hist[i]; if (c >= target) return i } return 255 };
-          const p05 = percentile(.05), p50 = percentile(.5), p98 = percentile(.98), neutralRatio = brightNeutral / Math.max(1, samples), avgSat = satSum / Math.max(1, samples), paperLike = clamp((neutralRatio - .12) / .46, 0, 1) * clamp((.42 - avgSat) / .3, 0, 1);
-          const block = Math.max(56, Math.round(Math.min(w, h) / 10)), cols = Math.max(2, Math.ceil(w / block) + 1), rows = Math.max(2, Math.ceil(h / block) + 1), bg = new Float32Array(cols * rows);
-          for (let gy = 0; gy < rows; gy++)for (let gx = 0; gx < cols; gx++) { const cx = Math.round(gx * (w - 1) / (cols - 1)), cy = Math.round(gy * (h - 1) / (rows - 1)), x0 = Math.max(0, cx - Math.floor(block / 2)), x1 = Math.min(w, cx + Math.ceil(block / 2)), y0 = Math.max(0, cy - Math.floor(block / 2)), y1 = Math.min(h, cy + Math.ceil(block / 2)), vals = [], step = Math.max(3, Math.floor(block / 12)); for (let yy = y0; yy < y1; yy += step)for (let xx = x0; xx < x1; xx += step) { const i = (yy * w + xx) * 4; vals.push(.299 * d[i] + .587 * d[i + 1] + .114 * d[i + 2]) } vals.sort((a, b) => a - b); const from = Math.floor(vals.length * .78), top = vals.slice(from); bg[gy * cols + gx] = top.length ? top.reduce((a, b) => a + b, 0) / top.length : p98 }
-          const globalRange = Math.max(105, p98 - p05), globalGain = clamp(218 / globalRange, .94, 1.14), globalOffset = clamp(16 - p05 * globalGain, -10, 18), globalStrength = .24 + .28 * paperLike, localStrength = .58 * paperLike, chromaScale = .98 - .08 * paperLike;
+        const out = document.createElement('canvas'); out.width = canvas.width; out.height = canvas.height; const ctx = out.getContext('2d', { willReadFrequently: true }); ctx.drawImage(canvas, 0, 0); const img = ctx.getImageData(0, 0, out.width, out.height);
+        applyFilterData(img.data, out.width, out.height, filterParams(img.data, out.width, out.height, filter)); ctx.putImageData(img, 0, 0); return out;
+      }
+      function applyFilterData(d, w, h, p) {
+        const filter = p.filter;
+        if (filter === 'color') { for (let i = 0; i < d.length; i += 4) { d[i] = d[i] * p.gain + p.offset; d[i + 1] = d[i + 1] * p.gain + p.offset; d[i + 2] = d[i + 2] * p.gain + p.offset } }
+        else if (filter === 'auto') {
+          const { cols, rows, grid } = p, gxs = new Float32Array(w); for (let x = 0; x < w; x++)gxs[x] = (x / (w - 1 || 1)) * (cols - 1);
           for (let y = 0; y < h; y++) {
             const gyf = (y / (h - 1 || 1)) * (rows - 1), gy0 = Math.floor(gyf), gy1 = Math.min(rows - 1, gy0 + 1), fy = gyf - gy0;
             for (let x = 0; x < w; x++) {
-              const gxf = (x / (w - 1 || 1)) * (cols - 1), gx0 = Math.floor(gxf), gx1 = Math.min(cols - 1, gx0 + 1), fx = gxf - gx0, b00 = bg[gy0 * cols + gx0], b10 = bg[gy0 * cols + gx1], b01 = bg[gy1 * cols + gx0], b11 = bg[gy1 * cols + gx1], paper = (b00 * (1 - fx) + b10 * fx) * (1 - fy) + (b01 * (1 - fx) + b11 * fx) * fy, i = (y * w + x) * 4, r = d[i], g = d[i + 1], b = d[i + 2], lum = .299 * r + .587 * g + .114 * b;
-              const localGain = 1 + (clamp(238 / Math.max(155, paper), .94, 1.24) - 1) * localStrength, localLum = lum * localGain, globalLum = clamp(localLum * globalGain + globalOffset, 0, 255), ny = clamp(localLum + (globalLum - localLum) * globalStrength, 0, 248);
-              d[i] = clamp(ny + (r - lum) * chromaScale, 0, 255); d[i + 1] = clamp(ny + (g - lum) * chromaScale, 0, 255); d[i + 2] = clamp(ny + (b - lum) * chromaScale, 0, 255);
+              const gxf = gxs[x], gx0 = Math.floor(gxf), gx1 = Math.min(cols - 1, gx0 + 1), fx = gxf - gx0, paper = (grid[gy0 * cols + gx0] * (1 - fx) + grid[gy0 * cols + gx1] * fx) * (1 - fy) + (grid[gy1 * cols + gx0] * (1 - fx) + grid[gy1 * cols + gx1] * fx) * fy, i = (y * w + x) * 4; autoPixel(d, i, paper, p);
             }
           }
         } else if (filter === 'gray') { for (let i = 0; i < d.length; i += 4) { const y = clamp((.299 * d[i] + .587 * d[i + 1] + .114 * d[i + 2] - 18) * 1.16 + 18, 0, 255); d[i] = d[i + 1] = d[i + 2] = y } }
         else if (filter === 'bw') { for (let i = 0; i < d.length; i += 4) { const y = .299 * d[i] + .587 * d[i + 1] + .114 * d[i + 2], v = y > 165 ? 255 : y > 115 ? Math.round((y - 115) * 5.1) : 0; d[i] = d[i + 1] = d[i + 2] = v } }
-        ctx.putImageData(img, 0, 0); return out;
       }
-      function rotateCanvas(src, quarter = 1) { const out = document.createElement('canvas'), odd = quarter % 2; out.width = odd ? src.height : src.width; out.height = odd ? src.width : src.height; const c = out.getContext('2d'); c.translate(out.width / 2, out.height / 2); c.rotate(quarter * Math.PI / 2); c.drawImage(src, -src.width / 2, -src.height / 2); return out }
+      // One 'auto' pixel, in place; the WebGL shader in renderPageGpu mirrors this formula.
+      function autoPixel(d, i, paper, p) {
+        const r = d[i], g = d[i + 1], b = d[i + 2], lum = .299 * r + .587 * g + .114 * b, maxc = Math.max(r, g, b), sat = maxc ? (maxc - Math.min(r, g, b)) / maxc : 0, localGain = 1 + (clamp(238 / Math.max(155, paper), .94, 1.24) - 1) * p.localStrength;
+        const tone = v => { const local = v * localGain, global = clamp(local * p.globalGain + p.globalOffset, 0, 255); return local + (global - local) * p.globalStrength };
+        const ny = clamp(tone(lum), 0, 248), white = p.whiten * smoothstep(tone(paper) - 30, tone(paper) - 8, ny) * (1 - smoothstep(.12, .25, sat)), y = ny + (255 - ny) * white, chroma = p.chromaScale * (1 - white);
+        d[i] = y + (r - lum) * chroma; d[i + 1] = y + (g - lum) * chroma; d[i + 2] = y + (b - lum) * chroma;
+      }
+      function rotateCanvas(src, quarter = 1) { const out = document.createElement('canvas'), odd = quarter % 2; out.width = odd ? src.height : src.width; out.height = odd ? src.width : src.height; const c = out.getContext('2d', { willReadFrequently: true }); c.translate(out.width / 2, out.height / 2); c.rotate(quarter * Math.PI / 2); c.drawImage(src, -src.width / 2, -src.height / 2); return out }
       async function canvasToBlob(canvas, type = 'image/jpeg', quality = .9) { return await new Promise((res, rej) => canvas.toBlob(b => b ? res(b) : rej(new Error('blob')), type, quality)) }
+      // A JPEG encode that waits for idle time (it reads the canvas back from the GPU, which blocks), so saving a page
+      // returns at once. Code that needs the result now calls .start() before awaiting.
+      function deferredBlob(canvas, quality) {
+        let run; const promise = new Promise((resolve, reject) => { run = () => { run = null; canvasToBlob(canvas, 'image/jpeg', quality).then(resolve, reject) } });
+        promise.start = () => run?.(); promise.catch(e => console.warn(e)); (window.requestIdleCallback || (f => setTimeout(f, 300)))(() => run?.(), { timeout: 2500 }); return promise;
+      }
+      // Page-list thumbnail. On the GPU path it is built on the CPU from the analysis pixels already read back, since
+      // toDataURL on a GPU-backed canvas waits for the GPU (hundreds of ms while the camera is running).
+      async function pageThumb(ed, canvas) {
+        const an = ed._analysis; if (!an?.pixels || an.key !== JSON.stringify([ed.corners, !!ed.cleanEdges])) return await canvasToDataURLThumb(canvas);
+        const [w, h] = fitSize(an.w, an.h, 360), d = downsampleRGBA(an.pixels, an.w, an.h, w, h); applyFilterData(d, w, h, an.params[ed.filter] || { filter: ed.filter });
+        let c = document.createElement('canvas'); c.width = w; c.height = h; c.getContext('2d', { willReadFrequently: true }).putImageData(new ImageData(d, w, h), 0, 0); const turns = ((ed.rotation || 0) + autoQuarter(ed)) % 4; if (turns) c = rotateCanvas(c, turns); return c.toDataURL('image/jpeg', .78);
+      }
       async function canvasToDataURLThumb(canvas) { const c = document.createElement('canvas'), max = 360, s = Math.min(1, max / Math.max(canvas.width, canvas.height)); c.width = Math.round(canvas.width * s); c.height = Math.round(canvas.height * s); c.getContext('2d').drawImage(canvas, 0, 0, c.width, c.height); return c.toDataURL('image/jpeg', .78) }
       function restorePageFocus(pageId, action = 'preview') {
         if (state.editor || document.querySelector('dialog:modal')) return;
@@ -3687,16 +3843,17 @@
         const targets = [card?.querySelector(`[data-action="${action}"]`), $('#mobileNav button.active'), $('#importBtn'), $('#importRoundBtn')];
         for (const target of targets) { if (!target?.isConnected || target.disabled || !target.getClientRects().length) continue; target.focus({ preventScroll: true }); if (document.activeElement === target) break }
       }
-      function finishEditor(result, expected = state.editor) { if (!expected || state.editor !== expected) return; if (result === 'cancel' && state.importQueue) state.importQueue.cancelled = true; const resolve = state.editorResolve; state.editorResolve = null; state.editor = null; busy(false); if ($('#editorDialog').open) $('#editorDialog').close(); if (expected.mode === 'edit') restorePageFocus(expected.pageId); if (resolve) resolve(result) }
+      function finishEditor(result, expected = state.editor) { if (!expected || state.editor !== expected) return; if (result === 'cancel' && state.importQueue) state.importQueue.cancelled = true; const resolve = state.editorResolve; state.editorResolve = null; state.editor = null; clearTimeout(expected._fullTimer); releaseGpuSource(); busy(false); if ($('#editorDialog').open) $('#editorDialog').close(); if (expected.mode === 'edit') restorePageFocus(expected.pageId); if (resolve) resolve(result) }
       async function saveEditorPage(asNew = false) {
         const ed = state.editor; if (!ed || ed.saving || (asNew && ed.mode !== 'edit')) return; ed.saving = true; ed.error = ''; syncEditorUi(); busy(true, t('processing'));
         // Keep the pixels and editable metadata from the same instant, even if controls change during encoding.
         const snapshot = { ...ed, corners: ed.corners.map(p => ({ ...p })) };
         try {
           await sleep(20); if (state.editor !== ed) return;
-          const filtered = editorOutput(snapshot, 2600), thumb = await canvasToDataURLThumb(filtered); if (state.editor !== ed) return;
-          const sourceBlob = snapshot.sourceBlob || await canvasToBlob(snapshot.source, 'image/jpeg', .94); if (state.editor !== ed) return;
-          const values = { canvas: filtered, filter: snapshot.filter, rotation: ((snapshot.rotation || 0) + autoQuarter(snapshot)) % 4, cleanEdges: !!snapshot.cleanEdges, thumb, label: snapshot.label || '', sourceBlob, corners: snapshot.corners, confidence: snapshot.confidence };
+          const filtered = fullOutput(snapshot), thumb = await pageThumb(snapshot, filtered); if (state.editor !== ed) return;
+          // Pages keep only JPEGs, encoded in idle time; the page JPEG goes into the PDF as is, so Done only assembles the file.
+          const jpeg = deferredBlob(filtered, PAGE_QUALITY), sourceBlob = snapshot.sourceBlob || deferredBlob(snapshot.source, .9);
+          const values = { jpeg, width: filtered.width, height: filtered.height, filter: snapshot.filter, rotation: ((snapshot.rotation || 0) + autoQuarter(snapshot)) % 4, cleanEdges: !!snapshot.cleanEdges, thumb, label: snapshot.label || '', sourceBlob, corners: snapshot.corners, confidence: snapshot.confidence };
           if (snapshot.mode === 'edit') {
             const index = state.pages.findIndex(x => x.id === snapshot.pageId); if (index < 0) { finishEditor('cancel', ed); return }
             // Compressed source Blobs are immutable; canvases and editable corners are owned by each page.
@@ -3708,10 +3865,16 @@
         finally { ed.saving = false; if (state.editor === ed) { busy(false); syncEditorUi() } }
       }
       function invalidatePdf() { if (state.lastPdf?.url) URL.revokeObjectURL(state.lastPdf.url); state.lastPdf = null; $('#resultCard').classList.add('hidden') }
-      function renderPages() { const g = $('#pageGrid'); g.innerHTML = ''; state.pages.forEach((p, i) => { const card = document.createElement('article'); card.className = 'page-card'; card.dataset.id = p.id; card.tabIndex = 0; card.setAttribute('aria-label', `${t('page')} ${i + 1}`); card.innerHTML = `<div class="page-thumb"><img src="${p.thumb}" alt="${t('page')} ${i + 1}" draggable="false"><span class="page-number">${i + 1}</span><span class="drag-hint">${icons.grip}</span></div><div class="page-meta"><span>${p.canvas.width}×${p.canvas.height}</span><div class="page-actions"><button class="mini-icon" type="button" data-action="preview" aria-label="${t('preview')}">${icons.eye}</button><button class="mini-icon" type="button" data-action="rotate" aria-label="${t('rotate')}">${icons.rotate}</button><button class="mini-icon danger" type="button" data-action="delete" aria-label="${t('delete')}">${icons.trash}</button></div></div>`; g.appendChild(card); bindPageDrag(card) }); const has = state.pages.length > 0; g.classList.toggle('hidden', !has); $('#pagesEmpty').classList.toggle('hidden', has); $('#clearAllBtn').classList.toggle('hidden', !has); $('#pageCount').textContent = state.pages.length; $('#summaryPages').textContent = state.pages.length; const mobileCount = $('#mobileNavPagesCount'); mobileCount.textContent = state.pages.length; mobileCount.classList.toggle('hidden', !has); $('#generateBtn').disabled = !has; renderSummary(); renderSessionCount() }
-      $('#pageGrid').addEventListener('click', async e => { const btn = e.target.closest('[data-action]'); if (!btn) return; const card = btn.closest('.page-card'), idx = state.pages.findIndex(p => p.id === card.dataset.id); if (idx < 0) return; if (btn.dataset.action === 'preview') { await openEditorFromPage(state.pages[idx]) } else if (btn.dataset.action === 'rotate') { const p = state.pages[idx]; p.canvas = rotateCanvas(p.canvas); p.rotation = ((p.rotation || 0) + 1) % 4; p.thumb = await canvasToDataURLThumb(p.canvas); renderPages(); invalidatePdf(); restorePageFocus(p.id, 'rotate') } else if (btn.dataset.action === 'delete') { if (await confirmUI.ask(t('deletePageTitle'), t('deletePageMessage'))) { const [page] = state.pages.splice(idx, 1); state.lastDeleted = { page, index: idx }; renderPages(); toast(t('pageDeleted'), true); invalidatePdf(); restorePageFocus(state.pages[Math.min(idx, state.pages.length - 1)]?.id) } } });
+      function renderPages() { const g = $('#pageGrid'); g.innerHTML = ''; state.pages.forEach((p, i) => { const card = document.createElement('article'); card.className = 'page-card'; card.dataset.id = p.id; card.tabIndex = 0; card.setAttribute('aria-label', `${t('page')} ${i + 1}`); card.innerHTML = `<div class="page-thumb"><img src="${p.thumb}" alt="${t('page')} ${i + 1}" draggable="false"><span class="page-number">${i + 1}</span><span class="drag-hint">${icons.grip}</span></div><div class="page-meta"><span>${p.width}×${p.height}</span><div class="page-actions"><button class="mini-icon" type="button" data-action="preview" aria-label="${t('preview')}">${icons.eye}</button><button class="mini-icon" type="button" data-action="rotate" aria-label="${t('rotate')}">${icons.rotate}</button><button class="mini-icon danger" type="button" data-action="delete" aria-label="${t('delete')}">${icons.trash}</button></div></div>`; g.appendChild(card); bindPageDrag(card) }); const has = state.pages.length > 0; g.classList.toggle('hidden', !has); $('#pagesEmpty').classList.toggle('hidden', has); $('#clearAllBtn').classList.toggle('hidden', !has); $('#pageCount').textContent = state.pages.length; $('#summaryPages').textContent = state.pages.length; const mobileCount = $('#mobileNavPagesCount'); mobileCount.textContent = state.pages.length; mobileCount.classList.toggle('hidden', !has); $('#generateBtn').disabled = !has; renderSummary(); renderSessionCount() }
+      $('#pageGrid').addEventListener('click', async e => { const btn = e.target.closest('[data-action]'); if (!btn) return; const card = btn.closest('.page-card'), idx = state.pages.findIndex(p => p.id === card.dataset.id); if (idx < 0) return; if (btn.dataset.action === 'preview') { await openEditorFromPage(state.pages[idx]) } else if (btn.dataset.action === 'rotate') { const p = state.pages[idx]; busy(true, t('processing')); try { await rotatePage(p) } catch (e) { console.warn(e); status(t('processingFailed')) } finally { busy(false) } renderPages(); invalidatePdf(); restorePageFocus(p.id, 'rotate') } else if (btn.dataset.action === 'delete') { if (await confirmUI.ask(t('deletePageTitle'), t('deletePageMessage'))) { const [page] = state.pages.splice(idx, 1); state.lastDeleted = { page, index: idx }; renderPages(); toast(t('pageDeleted'), true); invalidatePdf(); restorePageFocus(state.pages[Math.min(idx, state.pages.length - 1)]?.id) } } });
       $('#toastAction').addEventListener('click', () => { if (!state.lastDeleted) return; const { page, index, all } = state.lastDeleted; if (all) state.pages.unshift(...all); else if (page) state.pages.splice(Math.min(index, state.pages.length), 0, page); state.lastDeleted = null; $('#toast').classList.remove('show'); renderPages(); invalidatePdf(); restorePageFocus((all?.[0] || page)?.id) });
 
+      // Re-render from the source photo with one more quarter turn, so rotating never re-compresses the page JPEG.
+      async function rotatePage(p) {
+        p.sourceBlob?.start?.(); p.jpeg?.start?.(); const rotation = ((p.rotation || 0) + 1) % 4, sourceBlob = await p.sourceBlob; let out;
+        let ed = null; if (sourceBlob && p.corners) { ed = { source: await canvasFromBlob(sourceBlob), corners: p.corners, filter: p.filter || 'none', rotation, cleanEdges: !!p.cleanEdges }; out = editorOutput(ed); releaseGpuSource() } else out = rotateCanvas(await canvasFromBlob(await p.jpeg));
+        Object.assign(p, { rotation, width: out.width, height: out.height, thumb: ed ? await pageThumb(ed, out) : await canvasToDataURLThumb(out), jpeg: deferredBlob(out, PAGE_QUALITY) });
+      }
       function bindPageDrag(card) {
         card.addEventListener('keydown', e => { if (!e.altKey || !['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.key)) return; e.preventDefault(); const from = state.pages.findIndex(p => p.id === card.dataset.id), cols = innerWidth <= 600 ? 3 : innerWidth <= 820 ? 4 : 5, delta = e.key === 'ArrowLeft' ? -1 : e.key === 'ArrowRight' ? 1 : e.key === 'ArrowUp' ? -cols : cols, to = clamp(from + delta, 0, state.pages.length - 1); if (to === from) return; const [item] = state.pages.splice(from, 1); state.pages.splice(to, 0, item); const id = item.id; renderPages(); invalidatePdf(); requestAnimationFrame(() => document.querySelector(`.page-card[data-id="${id}"]`)?.focus()) });
         card.addEventListener('pointerdown', e => {
@@ -3753,12 +3916,25 @@
       function applyPreset(name) { $$('.preset').forEach(b => b.classList.toggle('active', b.dataset.preset === name)); if (name === 'standard') { $('#paperSelect').value = 'a4'; $('#colorSelect').value = 'page'; $('#limitSelect').value = '0' } if (name === '1mb') { $('#paperSelect').value = 'a4'; $('#colorSelect').value = 'page'; $('#limitSelect').value = '1048576' } if (name === '2mb') { $('#paperSelect').value = 'a4'; $('#colorSelect').value = 'page'; $('#limitSelect').value = '2097152' } if (name === 'a4') { $('#paperSelect').value = 'a4'; $('#limitSelect').value = '0' } if (name === 'bw') { $('#paperSelect').value = 'a4'; $('#colorSelect').value = 'bw'; $('#limitSelect').value = '0' } renderSummary(); invalidatePdf() }
       function renderChecksIfAny() { if (!state.lastPdf) return; renderChecks(state.lastPdf.blob.size, state.lastPdf.limit) }
       function renderChecks(size, limit) { const items = [{ ok: true, text: t('checkPages') }, { ok: true, text: $('#paperSelect').value === 'a4' ? t('checkA4') : t('checkOriginal') }, { ok: !limit || size <= limit, text: !limit || size <= limit ? t('checkSizeOk') : t('checkSizeWarn') }, { ok: true, text: t('checkReadable') }]; $('#checks').innerHTML = items.map(x => `<div class="check ${x.ok ? '' : 'warn'}">${x.ok ? icons.check : icons.warn}<span>${x.text}</span></div>`).join('') }
-      function cloneAndFilterPage(page, override, maxLong) { let src = page.canvas; if (override && override !== 'page') src = applyFilter(src, override === 'gray' ? 'gray' : override === 'bw' ? 'bw' : 'none'); const s = Math.min(1, maxLong / Math.max(src.width, src.height)); if (s >= .999) return src; const c = document.createElement('canvas'); c.width = Math.max(32, Math.round(src.width * s)); c.height = Math.max(32, Math.round(src.height * s)); c.getContext('2d').drawImage(src, 0, 0, c.width, c.height); return c }
-      async function compressPage(page, override, budget) { const dims = [2400, 2050, 1750, 1450, 1200, 980]; for (const maxLong of dims) { const c = cloneAndFilterPage(page, override, maxLong); let lo = .32, hi = .9, best = null; for (let i = 0; i < 5; i++) { const q = (lo + hi) / 2, b = await canvasToBlob(c, 'image/jpeg', q); if (!budget || b.size <= budget) { best = { blob: b, width: c.width, height: c.height, quality: q }; lo = q } else hi = q } if (best) return best; const low = await canvasToBlob(c, 'image/jpeg', .28); if (!budget || low.size <= budget) return { blob: low, width: c.width, height: c.height, quality: .28 } } const c = cloneAndFilterPage(page, override, 760), b = await canvasToBlob(c, 'image/jpeg', .24); return { blob: b, width: c.width, height: c.height, quality: .24 } }
+      function scaledCanvas(src, maxLong) { const s = Math.min(1, maxLong / Math.max(src.width, src.height)); if (s >= .999) return src; const c = document.createElement('canvas'); c.width = Math.max(32, Math.round(src.width * s)); c.height = Math.max(32, Math.round(src.height * s)); c.getContext('2d').drawImage(src, 0, 0, c.width, c.height); return c }
+      async function compressPage(page, override, budget) {
+        page.jpeg.start?.(); const jpeg = await page.jpeg, recolor = override === 'gray' || override === 'bw';
+        if (!recolor && (!budget || jpeg.size <= budget)) return { blob: jpeg, width: page.width, height: page.height, quality: PAGE_QUALITY };
+        let src = await canvasFromBlob(jpeg); if (recolor) src = applyFilter(src, override);
+        const encode = async (maxLong, q) => { const c = scaledCanvas(src, maxLong); return { blob: await canvasToBlob(c, 'image/jpeg', q), width: c.width, height: c.height, quality: q } };
+        const full = Math.max(src.width, src.height), first = recolor ? await encode(full, PAGE_QUALITY) : { blob: jpeg }; if (!budget || first.blob.size <= budget) return first.width ? first : { blob: jpeg, width: page.width, height: page.height, quality: PAGE_QUALITY };
+        // Start from a size predicted from the known file size (quality .5 is roughly 55% of .82, size grows with pixel count).
+        let long = Math.max(760, Math.min(full, Math.floor(full * Math.sqrt(budget / (first.blob.size * .55)) * .95)));
+        for (let round = 0; round < 4; round++) {
+          const low = await encode(long, .5); if (low.blob.size <= budget) { const mid = await encode(long, .66); return mid.blob.size <= budget ? mid : low }
+          if (long <= 760) break; long = Math.max(760, Math.floor(long * Math.sqrt(budget / low.blob.size) * .95));
+        }
+        return await encode(760, .3);
+      }
       function latin1Bytes(str) { const a = new Uint8Array(str.length); for (let i = 0; i < str.length; i++)a[i] = str.charCodeAt(i) & 255; return a }
       function concatBytes(parts) { const len = parts.reduce((n, p) => n + p.length, 0), out = new Uint8Array(len); let o = 0; for (const p of parts) { out.set(p, o); o += p.length } return out }
       async function buildPdf(imageEntries, paperMode) { const objects = [null], add = x => (objects.push(x), objects.length - 1), pageIds = []; const catalogId = add(null), pagesId = add(null); for (let i = 0; i < imageEntries.length; i++) { const im = imageEntries[i], bytes = new Uint8Array(await im.blob.arrayBuffer()), imgId = add({ binary: bytes, head: `<< /Type /XObject /Subtype /Image /Width ${im.width} /Height ${im.height} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${bytes.length} >>\nstream\n`, tail: '\nendstream' }); let pw, ph; if (paperMode === 'a4') { const landscape = im.width > im.height; pw = landscape ? 841.89 : 595.28; ph = landscape ? 595.28 : 841.89 } else { pw = 595.28; ph = pw * im.height / im.width; if (ph > 900) { ph = 841.89; pw = ph * im.width / im.height } } const margin = paperMode === 'a4' ? 6 : 0, boxW = pw - margin * 2, boxH = ph - margin * 2, scale = Math.min(boxW / im.width, boxH / im.height), nearA4 = paperMode === 'a4' && Math.abs((im.width / im.height) / (boxW / boxH) - 1) < .12, dw = nearA4 ? boxW : im.width * scale, dh = nearA4 ? boxH : im.height * scale, x = (pw - dw) / 2, y = (ph - dh) / 2, content = `q\n${dw.toFixed(2)} 0 0 ${dh.toFixed(2)} ${x.toFixed(2)} ${y.toFixed(2)} cm\n/Im${i + 1} Do\nQ\n`, contentBytes = latin1Bytes(content), contentId = add(`<< /Length ${contentBytes.length} >>\nstream\n${content}endstream`), pageId = add(`<< /Type /Page /Parent ${pagesId} 0 R /MediaBox [0 0 ${pw.toFixed(2)} ${ph.toFixed(2)}] /Resources << /XObject << /Im${i + 1} ${imgId} 0 R >> >> /Contents ${contentId} 0 R >>`); pageIds.push(pageId) } objects[catalogId] = `<< /Type /Catalog /Pages ${pagesId} 0 R >>`; objects[pagesId] = `<< /Type /Pages /Count ${pageIds.length} /Kids [${pageIds.map(id => id + ' 0 R').join(' ')}] >>`; const parts = [latin1Bytes('%PDF-1.4\n%âãÏÓ\n')], offsets = [0]; let offset = parts[0].length; for (let i = 1; i < objects.length; i++) { offsets[i] = offset; const o = objects[i], head = latin1Bytes(`${i} 0 obj\n`), body = typeof o === 'string' ? latin1Bytes(o) : concatBytes([latin1Bytes(o.head), o.binary, latin1Bytes(o.tail)]), end = latin1Bytes('\nendobj\n'), chunk = concatBytes([head, body, end]); parts.push(chunk); offset += chunk.length } const xrefOffset = offset; let xref = `xref\n0 ${objects.length}\n0000000000 65535 f \n`; for (let i = 1; i < objects.length; i++)xref += String(offsets[i]).padStart(10, '0') + ' 00000 n \n'; xref += `trailer\n<< /Size ${objects.length} /Root ${catalogId} 0 R >>\nstartxref\n${xrefOffset}\n%%EOF`; parts.push(latin1Bytes(xref)); return new Blob(parts, { type: 'application/pdf' }) }
-      async function generatePdf() { if (!state.pages.length) return; invalidatePdf(); busy(true, t('buildingPdf'), t('compressing')); await sleep(30); const limit = +$('#limitSelect').value, paper = $('#paperSelect').value, override = $('#colorSelect').value, budget = limit ? Math.max(22000, Math.floor((limit * 0.88) / state.pages.length)) : 0, entries = []; for (let i = 0; i < state.pages.length; i++) { $('#busyDetail').textContent = `${i + 1} / ${state.pages.length}`; entries.push(await compressPage(state.pages[i], override, budget)); await sleep(0) } let blob = await buildPdf(entries, paper); if (limit && blob.size > limit) { const tighter = Math.max(18000, Math.floor((limit * .76) / state.pages.length)), entries2 = []; for (let i = 0; i < state.pages.length; i++)entries2.push(await compressPage(state.pages[i], override, tighter)); blob = await buildPdf(entries2, paper) } const name = normalizeFilename($('#filenameInput').value), url = URL.createObjectURL(blob); state.lastPdf = { blob, url, name, limit }; $('#resultName').textContent = name; $('#resultSize').textContent = formatBytes(blob.size); renderChecks(blob.size, limit); $('#resultCard').classList.remove('hidden'); busy(false); status(blob.size <= limit || !limit ? t('pdfReady') : t('sizeTargetFailed'), 4200); return state.lastPdf }
+      async function generatePdf() { if (!state.pages.length) return; invalidatePdf(); busy(true, t('buildingPdf'), t('compressing')); await sleep(30); const limit = +$('#limitSelect').value, paper = $('#paperSelect').value, override = $('#colorSelect').value, budget = limit ? Math.max(22000, Math.floor((limit * 0.88) / state.pages.length)) : 0, total = state.pages.length; let finished = 0; const compressAll = b => Promise.all(state.pages.map(p => compressPage(p, override, b).then(e => { $('#busyDetail').textContent = `${++finished} / ${total}`; return e }))); let blob = await buildPdf(await compressAll(budget), paper); if (limit && blob.size > limit) { finished = 0; blob = await buildPdf(await compressAll(Math.max(18000, Math.floor((limit * .76) / total))), paper) } const name = normalizeFilename($('#filenameInput').value), url = URL.createObjectURL(blob); state.lastPdf = { blob, url, name, limit }; $('#resultName').textContent = name; $('#resultSize').textContent = formatBytes(blob.size); renderChecks(blob.size, limit); $('#resultCard').classList.remove('hidden'); busy(false); status(blob.size <= limit || !limit ? t('pdfReady') : t('sizeTargetFailed'), 4200); return state.lastPdf }
       function syncPdfFilename(normalizeInput = false) { const input = $('#filenameInput'), name = normalizeFilename(input.value); if (normalizeInput) input.value = name; if (state.lastPdf) { state.lastPdf.name = name; $('#resultName').textContent = name } return name }
       function downloadPdf() { syncPdfFilename(true); const p = state.lastPdf; if (!p) return; const a = document.createElement('a'); a.href = p.url; a.download = p.name; document.body.appendChild(a); a.click(); a.remove(); status(t('downloaded')) }
       async function sharePdf() { syncPdfFilename(true); const p = state.lastPdf; if (!p) return; try { const file = new File([p.blob], p.name, { type: 'application/pdf' }); if (!navigator.canShare?.({ files: [file] })) { status(t('shareUnsupported'), 4200); return } await navigator.share({ files: [file], title: p.name }); status(t('shared')) } catch (e) { if (e?.name !== 'AbortError') status(t('shareUnsupported'), 4200) } }
