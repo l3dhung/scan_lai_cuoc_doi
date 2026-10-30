@@ -1,0 +1,41 @@
+name: Build Windows exe
+
+# Builds windows/ into one self-contained Life-scanner.exe from the committed dist/index.html.
+# Run it from the Actions tab (Run workflow); the exe is attached to the run as an artifact.
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - "dist/index.html"
+      - "windows/**"
+      - ".github/workflows/windows-exe.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Set up .NET 8
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Publish Life-scanner.exe
+        shell: pwsh
+        run: |
+          $version = (Get-Content app.config.json -Raw | ConvertFrom-Json).version
+          dotnet publish windows/LifeScanner.csproj -c Release -p:Version=$version -o windows/out
+
+      - name: Upload exe
+        uses: actions/upload-artifact@v7
+        with:
+          name: Life-scanner-windows-x64
+          path: windows/out/Life-scanner.exe
