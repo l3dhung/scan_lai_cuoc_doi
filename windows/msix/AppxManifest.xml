@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- MSIX package for the Microsoft Store. Built by windows/msix/pack.ps1 (or the "Build Windows MSIX" workflow).
-     Before submitting, replace Identity Name, Identity Publisher and PublisherDisplayName with the values from
-     Partner Center (Product identity page). __VERSION__ is filled in from app.config.json at build time. -->
+     Identity Name, Identity Publisher and PublisherDisplayName come from Partner Center (Product identity page)
+     and must match it exactly. __VERSION__ is filled in from app.config.json at build time. -->
 <Package
   xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
   xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
@@ -9,14 +9,14 @@
   IgnorableNamespaces="uap rescap">
 
   <Identity
-    Name="MrHL.Life-scanner"
-    Publisher="CN=Life-scanner Test"
+    Name="LHng.Life-scanner"
+    Publisher="CN=8AA199A7-3246-4A2C-9516-3ABEF818B1D9"
     Version="__VERSION__"
     ProcessorArchitecture="x64" />
 
   <Properties>
     <DisplayName>Life-scanner</DisplayName>
-    <PublisherDisplayName>Mr.HL</PublisherDisplayName>
+    <PublisherDisplayName>Lê Hùng</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
     <Description>Chụp giấy tờ, nắn phẳng, sắp trang và xuất PDF ngay trên máy, không gửi gì đi đâu.</Description>
   </Properties>
