@@ -1,0 +1,22 @@
+CÀI THỬ BẢN MSIX TRƯỚC KHI ĐƯA LÊN STORE
+=========================================
+
+Bản .msix trong thư mục này được ký bằng chứng chỉ tạm, chỉ để thử. Khóa bí mật của chứng chỉ
+đã bị xóa ngay sau khi ký, nên không ai ký thêm được gì bằng nó.
+
+1. Tin chứng chỉ (cần quyền Administrator, làm một lần):
+   - Bấm đúp Life-scanner-test.cer -> Install Certificate...
+   - Chọn "Local Machine" -> Next
+   - Chọn "Place all certificates in the following store" -> Browse -> "Trusted People" -> OK -> Next -> Finish
+
+2. Bấm đúp file Life-scanner_x.x.x.0_x64.msix -> Install.
+   App hiện trong Start menu với tên Life-scanner.
+
+3. Thử: camera, chọn thư mục "Lưu vào", lưu PDF, "Mở trong Explorer", Sổ thành tích.
+
+4. Thử xong, gỡ:
+   - Settings -> Apps -> Life-scanner -> Uninstall
+   - Win+R -> certlm.msc -> Trusted People -> Certificates -> xóa chứng chỉ có
+     Friendly Name "Life-scanner test signing"
+
+Gỡ bản thử trước khi cài bản chính thức từ Microsoft Store.

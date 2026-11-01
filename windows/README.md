@@ -15,3 +15,11 @@ Một file `Life-scanner.exe` duy nhất, chạy trên Windows 10/11 64-bit mà 
 Build lại `dist/` trước (`node scripts/build-standalone.cjs`) nếu vừa sửa giao diện.
 
 File .exe chưa được ký số, nên lần đầu mở Windows SmartScreen có thể cảnh báo: bấm "More info" → "Run anyway".
+
+## Microsoft Store (MSIX)
+
+`windows/msix/` đóng gói cùng app này thành `.msix` để nộp lên Microsoft Store; file `.exe` ở trên không đổi.
+
+- Build: GitHub tab Actions → "Build Windows MSIX", hoặc trên Windows chạy `windows\msix\pack.ps1 -TestSign`.
+- Logo Store và icon (`assets/app-icon.png`, `windows/app.ico`, `windows/msix/Assets`) tạo từ `assets/favicon.svg` bằng `windows/msix/make-assets.sh` (chạy trên Mac).
+- Các bước đăng ký và nộp: `windows/msix/STORE.md`. Cài thử trước khi nộp: `windows/msix/TEST-INSTALL.txt`.

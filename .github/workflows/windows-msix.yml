@@ -1,0 +1,47 @@
+name: Build Windows MSIX
+
+# Packages windows/ into an MSIX for the Microsoft Store (windows/msix/pack.ps1).
+# Artifacts: Life-scanner-msix-store (unsigned, upload it to Partner Center) and
+# Life-scanner-msix-test (signed with a throwaway certificate, see TEST-INSTALL.txt inside).
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - "dist/index.html"
+      - "windows/**"
+      - "app.config.json"
+      - ".github/workflows/windows-msix.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Set up .NET 8
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Build MSIX
+        shell: pwsh
+        run: ./windows/msix/pack.ps1 -TestSign
+
+      - name: Upload Store package
+        uses: actions/upload-artifact@v7
+        with:
+          name: Life-scanner-msix-store
+          path: windows/msix/out/*.msix
+
+      - name: Upload test package
+        uses: actions/upload-artifact@v7
+        with:
+          name: Life-scanner-msix-test
+          path: windows/msix/out/test/

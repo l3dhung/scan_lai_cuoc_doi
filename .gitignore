@@ -7,3 +7,4 @@ __pycache__/
 windows/bin/
 windows/obj/
 windows/out/
+windows/msix/out/

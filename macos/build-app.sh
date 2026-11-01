@@ -22,16 +22,21 @@ cp "$ROOT/macos/serve.py" "$TMP/app.app/Contents/Resources/serve.py"
 cp "$ROOT/macos/launcher.sh" "$TMP/app.app/Contents/MacOS/DocumentScanner"
 chmod +x "$TMP/app.app/Contents/MacOS/DocumentScanner"
 
-# Icon: render the SVG favicon with Quick Look, then build an .icns.
+# Icon: use assets/app-icon.png (transparent corners, from windows/msix/make-assets.sh),
+# else render the SVG favicon with Quick Look, then build an .icns.
 ICONSET="$TMP/AppIcon.iconset"
 mkdir -p "$ICONSET"
-qlmanage -t -s 1024 -o "$TMP" "$ROOT/assets/favicon.svg" >/dev/null 2>&1 || true
+ICON_PNG="$ROOT/assets/app-icon.png"
+if [ ! -f "$ICON_PNG" ]; then
+  qlmanage -t -s 1024 -o "$TMP" "$ROOT/assets/favicon.svg" >/dev/null 2>&1 || true
+  ICON_PNG="$TMP/favicon.svg.png"
+fi
 ICON_ENTRY=""
-if [ -f "$TMP/favicon.svg.png" ]; then
+if [ -f "$ICON_PNG" ]; then
   for size in 16 32 128 256 512; do
-    sips -z "$size" "$size" "$TMP/favicon.svg.png" --out "$ICONSET/icon_${size}x${size}.png" >/dev/null
+    sips -z "$size" "$size" "$ICON_PNG" --out "$ICONSET/icon_${size}x${size}.png" >/dev/null
     double=$((size * 2))
-    sips -z "$double" "$double" "$TMP/favicon.svg.png" --out "$ICONSET/icon_${size}x${size}@2x.png" >/dev/null
+    sips -z "$double" "$double" "$ICON_PNG" --out "$ICONSET/icon_${size}x${size}@2x.png" >/dev/null
   done
   iconutil -c icns "$ICONSET" -o "$TMP/app.app/Contents/Resources/AppIcon.icns"
   ICON_ENTRY="<key>CFBundleIconFile</key><string>AppIcon</string>"
