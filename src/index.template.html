@@ -733,6 +733,151 @@
       font-size: 12px
     }
 
+    .section-actions {
+      display: flex;
+      flex: 0 0 auto;
+      gap: 7px
+    }
+
+    .merge-bar,
+    .sheet-hint {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 10px;
+      padding: 8px 10px;
+      border: 1px solid var(--accent);
+      border-radius: 12px;
+      background: var(--accent-soft);
+      font-size: 12px;
+      font-weight: 650
+    }
+
+    .merge-bar {
+      position: sticky;
+      z-index: 20;
+      top: calc(var(--header-height) + 8px)
+    }
+
+    .merge-bar-actions {
+      display: flex;
+      flex: 0 0 auto;
+      gap: 7px
+    }
+
+    .page-grid.selecting .page-actions,
+    .page-grid.selecting .drag-hint {
+      visibility: hidden
+    }
+
+    .page-grid.selecting .page-card {
+      cursor: pointer
+    }
+
+    .page-grid.selecting .page-card.is-sheet {
+      opacity: .45;
+      cursor: not-allowed
+    }
+
+    .page-card.picked {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px var(--accent)
+    }
+
+    .pick-mark {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      display: none;
+      width: 26px;
+      height: 26px;
+      place-items: center;
+      border: 2px solid #fff;
+      border-radius: 50%;
+      background: rgba(25, 28, 24, .42);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 800
+    }
+
+    .page-grid.selecting .page-card:not(.is-sheet) .pick-mark {
+      display: grid
+    }
+
+    .page-card.picked .pick-mark {
+      background: var(--accent)
+    }
+
+    .sheet-paper {
+      position: relative;
+      width: 96%;
+      aspect-ratio: 210/297;
+      overflow: hidden;
+      background: #fff;
+      box-shadow: 0 0 0 1px rgba(25, 28, 24, .14)
+    }
+
+    .sheet-paper img,
+    .page-thumb .sheet-paper img {
+      position: absolute;
+      object-fit: fill;
+      background: none;
+      max-width: none
+    }
+
+    .sheet-layouts {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin: 10px 0 12px
+    }
+
+    .sheet-layout {
+      min-height: 37px;
+      padding: 7px 11px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--surface);
+      color: inherit;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 720
+    }
+
+    .sheet-layout.active {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+      color: var(--accent)
+    }
+
+    .sheet-previews {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      overflow-x: auto;
+      padding: 12px;
+      border-radius: 10px;
+      background: var(--surface-muted)
+    }
+
+    .sheet-previews .sheet-paper {
+      flex: 0 0 auto;
+      width: 190px
+    }
+
+    .sheet-dialog .confirm-body p {
+      margin-top: 10px
+    }
+
+    .sheet-dialog .confirm-actions {
+      align-items: center
+    }
+
+    .sheet-dialog #sheetReverse {
+      margin-right: auto
+    }
+
     .count-badge {
       display: inline-flex;
       align-items: center;
@@ -2991,8 +3136,20 @@
           <h2 id="pagesHeading"><span data-i18n="pages">Pages</span> <span class="count-badge" id="pageCount">0</span>
           </h2>
           <p data-i18n="pagesDesc">Drag cards directly to reorder — no long press required.</p>
-        </div><button class="btn small ghost-danger hidden" id="clearAllBtn" type="button" data-i18n="clearAll">Delete
-          all</button>
+        </div>
+        <div class="section-actions"><button class="btn small hidden" id="mergeModeBtn" type="button"
+            data-i18n="mergeMode">Ghép trang</button><button class="btn small ghost-danger hidden" id="clearAllBtn"
+            type="button" data-i18n="clearAll">Delete all</button></div>
+      </div>
+      <div class="merge-bar hidden" id="mergeBar"><span id="mergeCount"></span>
+        <div class="merge-bar-actions"><button class="btn small" id="mergeCancel" type="button"
+            data-i18n="cancel">Cancel</button><button class="btn small primary" id="mergeNext" type="button" disabled
+            data-i18n="mergeNext">Xếp lên A4</button></div>
+      </div>
+      <div class="sheet-hint hidden" id="sheetHint"><span id="sheetHintText"></span>
+        <div class="merge-bar-actions"><button class="btn small" id="sheetHintSkip" type="button"
+            data-i18n="sheetHintSkip">Thôi</button><button class="btn small primary" id="sheetHintGo" type="button"
+            data-i18n="sheetOk">Ghép</button></div>
       </div>
       <div class="pages-empty" id="pagesEmpty"><svg viewBox="0 0 24 24" fill="none">
           <path d="M6 3h9l3 3v15H6V3Z" stroke="currentColor" stroke-width="1.7" />
@@ -3117,6 +3274,7 @@
           Thêm trang to keep it and scan the next page, or Done to create the PDF (one page or all pages so far) and
           save it straight to the chosen folder. Background showing through folded corners or curled edges is painted
           with the paper color.</li>
+        <li data-i18n="helpStep6">Ghép trang: chọn các ảnh muốn in chung rồi chọn mẫu xếp trên tờ A4.</li>
       </ol>
       <h3 data-i18n="helpPrivacyTitle">Privacy</h3>
       <p data-i18n="helpPrivacyText">Image processing and PDF creation run inside this page. The app does not send
@@ -3202,6 +3360,22 @@
     </div>
   </dialog>
 
+  <dialog class="confirm-dialog sheet-dialog" id="sheetDialog" aria-labelledby="sheetDialogTitle">
+    <div class="confirm-body">
+      <h2 id="sheetDialogTitle" data-i18n="sheetTitle">Ghép vào tờ A4</h2>
+      <div class="sheet-layouts" id="sheetLayouts"><button class="sheet-layout" type="button" data-layout="card"
+          data-i18n="layoutCard">Thẻ thật cỡ</button><button class="sheet-layout" type="button" data-layout="two"
+          data-i18n="layoutTwo">2 ảnh/tờ</button><button class="sheet-layout" type="button" data-layout="four"
+          data-i18n="layoutFour">4 ảnh/tờ</button></div>
+      <div class="sheet-previews" id="sheetPreviews"></div>
+      <p id="sheetNote"></p>
+    </div>
+    <div class="confirm-actions"><button class="btn small" id="sheetReverse" type="button"
+        data-i18n="sheetReverse">Đảo thứ tự</button><button class="btn small" id="sheetCancel" type="button"
+        data-i18n="cancel">Cancel</button><button class="btn small primary" id="sheetOk" type="button"
+        data-i18n="sheetOk">Ghép</button></div>
+  </dialog>
+
   <dialog class="confirm-dialog" id="confirmDialog">
     <div class="confirm-body">
       <h2 id="confirmTitle"></h2>
@@ -3234,6 +3408,7 @@
       const sleep = ms => new Promise(r => setTimeout(r, ms));
       const icons = {
         rotate: '<svg viewBox="0 0 24 24" fill="none"><path d="M18 8V4l-2 2a7 7 0 1 0 2.3 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+        split: '<svg viewBox="0 0 24 24" fill="none"><path d="M4 4h16v6H4zM4 14h16v6H4z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>',
         trash: '<svg viewBox="0 0 24 24" fill="none"><path d="M5 7h14M9 7V4h6v3M8 10v8M12 10v8M16 10v8M7 7l1 14h8l1-14" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>',
         grip: '<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="8" r="1.2"/><circle cx="15" cy="8" r="1.2"/><circle cx="9" cy="12" r="1.2"/><circle cx="15" cy="12" r="1.2"/><circle cx="9" cy="16" r="1.2"/><circle cx="15" cy="16" r="1.2"/></svg>',
         eye: '<svg viewBox="0 0 24 24" fill="none"><path d="M3.5 12s3.1-5 8.5-5 8.5 5 8.5 5-3.1 5-8.5 5-8.5-5-8.5-5Z" stroke="currentColor" stroke-width="1.7"/><circle cx="12" cy="12" r="2.7" stroke="currentColor" stroke-width="1.7"/></svg>',
@@ -3448,10 +3623,32 @@
           statsResetTitle: 'Đếm lại từ đầu?',
           statsResetMessage: 'Số thủ tục và số trang sẽ về 0. Thành tích cũ bay màu, không lấy lại được đâu nha.',
           statsResetOk: 'Về 0',
-          statsResetDone: 'Đã về 0, làm lại cuộc đời'
+          statsResetDone: 'Đã về 0, làm lại cuộc đời',
+          helpStep6: 'Ghép trang: bấm Ghép trang, tích các ảnh muốn in chung (tích theo thứ tự muốn xếp) rồi chọn mẫu. CCCD 2 mặt gọn trong 1 tờ A4, đúng cỡ thẻ thật. Khi in nhớ chọn tỉ lệ 100%. Đổi ý thì bấm Tách trên tờ đã ghép.',
+          mergeMode: 'Ghép trang',
+          mergeNext: 'Xếp lên A4',
+          mergeCount: 'Đã chọn {n} ảnh, tích theo thứ tự muốn xếp',
+          mergeNone: 'Tích các ảnh muốn nhét chung 1 tờ A4',
+          sheetTitle: 'Ghép vào tờ A4',
+          sheetOk: 'Ghép',
+          sheetReverse: 'Đảo thứ tự',
+          layoutCard: 'Thẻ thật cỡ',
+          layoutTwo: '2 ảnh/tờ',
+          layoutFour: '4 ảnh/tờ',
+          sheetNoteCard: 'Thẻ in đúng 85,6 × 54 mm. Khi in nhớ chọn 100% (Actual size), chọn Fit là thẻ phình to ngay.',
+          sheetNoteFit: 'Ảnh nằm gọn trong ô, không méo, không mất miếng nào.',
+          sheetNoteMany: 'Thành {n} tờ A4.',
+          sheetMeta: 'A4 · {n} ảnh',
+          sheetEdit: 'Đổi cách xếp',
+          sheetSplit: 'Tách',
+          sheetMerged: 'Ghép xong, tiết kiệm giấy rồi đấy',
+          sheetSplitDone: 'Đã tách, ảnh nào về nhà nấy',
+          sheetHintText: 'Có {n} ảnh trông giống thẻ. Ghép vào tờ A4 cho đỡ phí giấy nhé?',
+          sheetHintSkip: 'Thôi',
+          checkPrintActual: 'Khi in chọn tỉ lệ 100% (Actual size) để thẻ đúng cỡ thật'
         }
       };
-      const state = { lang: 'vi', procedureActive: false, autoExport: true, autoPortrait: true, cleanEdges: true, procedure: '', procedureHistory: [], folder: null, sessionBusy: false, lastSaved: null, analyzing: false, auto: { smooth: null, lastCorners: null, holdStart: 0, armedAt: 0, needChange: false, capturedCorners: null }, pages: [], cameraError: null, stream: null, track: null, devices: [], deviceIndex: 0, torch: false, autoCapture: true, autoTimer: null, lastAutoCorners: null, liveDetection: null, stableCount: 0, editor: null, importQueue: null, lastDeleted: null, lastPdf: null, drag: null, previewLoop: null, zoom: 1, zoomMin: 1, zoomMax: 4, zoomMode: 'digital', mobileView: 'scanSection' };
+      const state = { lang: 'vi', merge: null, composer: null, sheetHintSkip: '', procedureActive: false, autoExport: true, autoPortrait: true, cleanEdges: true, procedure: '', procedureHistory: [], folder: null, sessionBusy: false, lastSaved: null, analyzing: false, auto: { smooth: null, lastCorners: null, holdStart: 0, armedAt: 0, needChange: false, capturedCorners: null }, pages: [], cameraError: null, stream: null, track: null, devices: [], deviceIndex: 0, torch: false, autoCapture: true, autoTimer: null, lastAutoCorners: null, liveDetection: null, stableCount: 0, editor: null, importQueue: null, lastDeleted: null, lastPdf: null, drag: null, previewLoop: null, zoom: 1, zoomMin: 1, zoomMax: 4, zoomMode: 'digital', mobileView: 'scanSection' };
       function t(k) { return I18N[state.lang][k] || k }
       function applyI18n() { document.documentElement.lang = state.lang; $$('[data-i18n]').forEach(el => { const k = el.dataset.i18n; if (I18N[state.lang][k]) el.textContent = t(k) }); $$('[data-i18n-aria]').forEach(el => { const k = el.dataset.i18nAria; el.setAttribute('aria-label', t(k)) });['#helpBtn', '#mobileHelpBtn'].forEach(id => { const button = $(id); if (button) button.title = t('help') }); syncCameraUi(); renderPages(); renderChecksIfAny(); if (state.cameraError) $('#cameraErrorText').textContent = cameraErrorMessage(state.cameraError); if (state.editor) syncEditorUi() }
       function status(msg, ms = 2600) { const el = $('#statusLine'); el.textContent = msg; el.classList.add('show'); clearTimeout(status.timer); status.timer = setTimeout(() => el.classList.remove('show'), ms) }
@@ -4019,8 +4216,45 @@ void main() {
         finally { ed.saving = false; if (state.editor === ed) { busy(false); syncEditorUi() } }
       }
       function invalidatePdf() { if (state.lastPdf?.url) URL.revokeObjectURL(state.lastPdf.url); state.lastPdf = null; $('#resultCard').classList.add('hidden') }
-      function renderPages() { const g = $('#pageGrid'); g.innerHTML = ''; state.pages.forEach((p, i) => { const card = document.createElement('article'); card.className = 'page-card'; card.dataset.id = p.id; card.tabIndex = 0; card.setAttribute('aria-label', `${t('page')} ${i + 1}`); card.innerHTML = `<div class="page-thumb"><img src="${p.thumb}" alt="${t('page')} ${i + 1}" draggable="false"><span class="page-number">${i + 1}</span><span class="drag-hint">${icons.grip}</span></div><div class="page-meta"><span>${p.width}×${p.height}</span><div class="page-actions"><button class="mini-icon" type="button" data-action="preview" aria-label="${t('preview')}">${icons.eye}</button><button class="mini-icon" type="button" data-action="rotate" aria-label="${t('rotate')}">${icons.rotate}</button><button class="mini-icon danger" type="button" data-action="delete" aria-label="${t('delete')}">${icons.trash}</button></div></div>`; g.appendChild(card); bindPageDrag(card) }); const has = state.pages.length > 0; g.classList.toggle('hidden', !has); $('#pagesEmpty').classList.toggle('hidden', has); $('#clearAllBtn').classList.toggle('hidden', !has); $('#pageCount').textContent = state.pages.length; $('#summaryPages').textContent = state.pages.length; const mobileCount = $('#mobileNavPagesCount'); mobileCount.textContent = state.pages.length; mobileCount.classList.toggle('hidden', !has); $('#generateBtn').disabled = !has; renderSummary(); renderSessionCount() }
-      $('#pageGrid').addEventListener('click', async e => { const btn = e.target.closest('[data-action]'); if (!btn) return; const card = btn.closest('.page-card'), idx = state.pages.findIndex(p => p.id === card.dataset.id); if (idx < 0) return; if (btn.dataset.action === 'preview') { await openEditorFromPage(state.pages[idx]) } else if (btn.dataset.action === 'rotate') { const p = state.pages[idx]; busy(true, t('processing')); try { await rotatePage(p) } catch (e) { console.warn(e); status(t('processingFailed')) } finally { busy(false) } renderPages(); invalidatePdf(); restorePageFocus(p.id, 'rotate') } else if (btn.dataset.action === 'delete') { if (await confirmUI.ask(t('deletePageTitle'), t('deletePageMessage'))) { const [page] = state.pages.splice(idx, 1); state.lastDeleted = { page, index: idx }; renderPages(); toast(t('pageDeleted'), true); invalidatePdf(); restorePageFocus(state.pages[Math.min(idx, state.pages.length - 1)]?.id) } } });
+      // A sheet is one A4 page holding several scans: an entry of state.pages with sheet: { layout, items }, where items
+      // are ordinary pages, so splitting it gives them back untouched. Measurements are in mm from the top-left corner.
+      const A4_MM = [210, 297], ID1_MM = [85.6, 53.98], SHEET_DPI = 400, SHEET_CAP = { card: 10, two: 2, four: 4 };
+      const isCardLike = p => { const r = Math.max(p.width, p.height) / Math.min(p.width, p.height); return r >= 1.48 && r <= 1.72 };
+      function sheetCells(layout, n) {
+        const [pw, ph] = A4_MM, cells = [], margin = 10, gap = 6;
+        if (layout === 'card') {
+          const [w, h] = ID1_MM; if (n <= 2) { const between = 12, top = (ph - h * n - between * (n - 1)) / 2; for (let i = 0; i < n; i++) cells.push({ x: (pw - w) / 2, y: top + i * (h + between), w, h }); return cells }
+          const rows = Math.ceil(n / 2), rowGap = Math.min(5, (ph - 16 - rows * h) / Math.max(1, rows - 1)), left = (pw - w * 2 - gap) / 2, top = Math.max(8, Math.min(12, (ph - rows * h - (rows - 1) * rowGap) / 2));
+          for (let i = 0; i < n; i++) cells.push({ x: left + (i % 2) * (w + gap), y: top + Math.floor(i / 2) * (h + rowGap), w, h }); return cells;
+        }
+        const cols = layout === 'four' ? 2 : 1, w = (pw - margin * 2 - gap * (cols - 1)) / cols, h = (ph - margin * 2 - gap) / 2;
+        for (let i = 0; i < n; i++) cells.push({ x: margin + (i % cols) * (w + gap), y: margin + Math.floor(i / cols) * (h + gap), w, h }); return cells;
+      }
+      // Quarter turn 1 is what auto-portrait applies to landscape paper, 3 undoes it, so a card shot upright comes back upright.
+      function placeInCell(p, c, exact) { const s0 = Math.min(c.w / p.width, c.h / p.height), s1 = Math.min(c.w / p.height, c.h / p.width), turn = s1 > s0 * 1.05 ? (p.width > p.height ? 1 : 3) : 0, s = turn ? s1 : s0, w = exact ? c.w : (turn ? p.height : p.width) * s, h = exact ? c.h : (turn ? p.width : p.height) * s; return { x: c.x + (c.w - w) / 2, y: c.y + (c.h - h) / 2, w, h, turn } }
+      function placeSheet(layout, items) { const cells = sheetCells(layout, items.length); return items.map((p, i) => placeInCell(p, cells[i], layout === 'card' && isCardLike(p))) }
+      function sheetMarkup(layout, items) { const [pw, ph] = A4_MM, boxes = placeSheet(layout, items); return `<div class="sheet-paper">${items.map((p, i) => { const b = boxes[i], iw = b.turn ? b.h : b.w, ih = b.turn ? b.w : b.h; return `<img src="${p.thumb}" alt="" draggable="false" style="left:${(b.x + b.w / 2) / pw * 100}%;top:${(b.y + b.h / 2) / ph * 100}%;width:${iw / pw * 100}%;height:${ih / ph * 100}%;transform:translate(-50%,-50%) rotate(${b.turn * 90}deg)">` }).join('')}</div>` }
+      function chunkItems(items, size) { const out = []; for (let i = 0; i < items.length; i += size) out.push(items.slice(i, i + size)); return out }
+      const scanCount = () => state.pages.reduce((n, p) => n + (p.sheet ? p.sheet.items.length : 1), 0);
+      function syncMergeUi() { const m = state.merge, on = !!m, n = m ? m.ids.length : 0; $('#pageGrid').classList.toggle('selecting', on); $('#mergeBar').classList.toggle('hidden', !on); $('#mergeCount').textContent = n ? t('mergeCount').replace('{n}', n) : t('mergeNone'); $('#mergeNext').disabled = !n; $$('.page-card').forEach(card => { const at = m ? m.ids.indexOf(card.dataset.id) : -1; card.classList.toggle('picked', at >= 0); card.querySelector('.pick-mark').textContent = at >= 0 ? at + 1 : ''; if (on) card.setAttribute('aria-pressed', at >= 0); else card.removeAttribute('aria-pressed') }) }
+      function toggleMergePick(id) { const p = state.pages.find(x => x.id === id); if (!p || p.sheet) return; const ids = state.merge.ids, at = ids.indexOf(id); if (at >= 0) ids.splice(at, 1); else ids.push(id); syncMergeUi() }
+      function renderSheetHint() { const cards = state.pages.filter(p => !p.sheet && isCardLike(p)), key = cards.map(p => p.id).join(), show = cards.length >= 2 && !state.merge && key !== state.sheetHintSkip; $('#sheetHint').classList.toggle('hidden', !show); if (show) $('#sheetHintText').textContent = t('sheetHintText').replace('{n}', cards.length) }
+      function setMergeMode(on) { state.merge = on ? { ids: [] } : null; syncMergeUi(); renderSheetHint() }
+      function openComposer(items, sheetId = null, layout = null) { state.composer = { items: items.slice(), sheetId, layout: layout || (items.every(isCardLike) ? 'card' : items.length <= 2 ? 'two' : 'four') }; renderComposer(); $('#sheetDialog').showModal(); $('#sheetOk').focus() }
+      function renderComposer() { const c = state.composer, groups = chunkItems(c.items, SHEET_CAP[c.layout]); $$('.sheet-layout').forEach(b => b.classList.toggle('active', b.dataset.layout === c.layout)); $('#sheetPreviews').innerHTML = groups.map(g => sheetMarkup(c.layout, g)).join(''); $('#sheetPreviews').style.justifyContent = groups.length > 1 ? 'flex-start' : ''; $('#sheetNote').textContent = t(c.layout === 'card' ? 'sheetNoteCard' : 'sheetNoteFit') + (groups.length > 1 ? ' ' + t('sheetNoteMany').replace('{n}', groups.length) : ''); $('#sheetReverse').classList.toggle('hidden', c.items.length < 2) }
+      function closeComposer() { state.composer = null; $('#sheetDialog').close() }
+      function commitComposer() { const c = state.composer; if (!c) return; const groups = chunkItems(c.items, SHEET_CAP[c.layout]).map(items => ({ id: uid(), sheet: { layout: c.layout, items } })); let at; if (c.sheetId) { at = state.pages.findIndex(p => p.id === c.sheetId); if (at < 0) { closeComposer(); return } state.pages.splice(at, 1) } else { const ids = new Set(c.items.map(p => p.id)); at = state.pages.findIndex(p => ids.has(p.id)); if (at < 0) { closeComposer(); return } state.pages = state.pages.filter(p => !ids.has(p.id)) } state.pages.splice(at, 0, ...groups); state.merge = null; closeComposer(); renderPages(); invalidatePdf(); status(t('sheetMerged')); restorePageFocus(groups[0].id) }
+      function renderPages() { if (state.merge) { state.merge.ids = state.merge.ids.filter(id => state.pages.some(p => p.id === id && !p.sheet)); if (!state.pages.some(p => !p.sheet)) state.merge = null } const g = $('#pageGrid'); g.innerHTML = ''; state.pages.forEach((p, i) => { const card = document.createElement('article'); card.className = 'page-card' + (p.sheet ? ' is-sheet' : ''); card.dataset.id = p.id; card.tabIndex = 0; card.setAttribute('aria-label', `${t('page')} ${i + 1}`); card.innerHTML = p.sheet ? `<div class="page-thumb">${sheetMarkup(p.sheet.layout, p.sheet.items)}<span class="page-number">${i + 1}</span><span class="drag-hint">${icons.grip}</span><span class="pick-mark"></span></div><div class="page-meta"><span>${t('sheetMeta').replace('{n}', p.sheet.items.length)}</span><div class="page-actions"><button class="mini-icon" type="button" data-action="preview" aria-label="${t('sheetEdit')}" title="${t('sheetEdit')}">${icons.eye}</button><button class="mini-icon" type="button" data-action="split" aria-label="${t('sheetSplit')}" title="${t('sheetSplit')}">${icons.split}</button><button class="mini-icon danger" type="button" data-action="delete" aria-label="${t('delete')}">${icons.trash}</button></div></div>` : `<div class="page-thumb"><img src="${p.thumb}" alt="${t('page')} ${i + 1}" draggable="false"><span class="page-number">${i + 1}</span><span class="drag-hint">${icons.grip}</span><span class="pick-mark"></span></div><div class="page-meta"><span>${p.width}×${p.height}</span><div class="page-actions"><button class="mini-icon" type="button" data-action="preview" aria-label="${t('preview')}">${icons.eye}</button><button class="mini-icon" type="button" data-action="rotate" aria-label="${t('rotate')}">${icons.rotate}</button><button class="mini-icon danger" type="button" data-action="delete" aria-label="${t('delete')}">${icons.trash}</button></div></div>`; g.appendChild(card); bindPageDrag(card) }); $('#mergeModeBtn').classList.toggle('hidden', !state.pages.some(p => !p.sheet) || !!state.merge); syncMergeUi(); renderSheetHint(); const has = state.pages.length > 0; g.classList.toggle('hidden', !has); $('#pagesEmpty').classList.toggle('hidden', has); $('#clearAllBtn').classList.toggle('hidden', !has); $('#pageCount').textContent = state.pages.length; $('#summaryPages').textContent = state.pages.length; const mobileCount = $('#mobileNavPagesCount'); mobileCount.textContent = state.pages.length; mobileCount.classList.toggle('hidden', !has); $('#generateBtn').disabled = !has; renderSummary(); renderSessionCount() }
+      $('#pageGrid').addEventListener('click', async e => { if (state.merge) { const picked = e.target.closest('.page-card'); if (picked) toggleMergePick(picked.dataset.id); return } const btn = e.target.closest('[data-action]'); if (!btn) return; const card = btn.closest('.page-card'), idx = state.pages.findIndex(p => p.id === card.dataset.id); if (idx < 0) return; if (btn.dataset.action === 'preview') { const entry = state.pages[idx]; if (entry.sheet) openComposer(entry.sheet.items, entry.id, entry.sheet.layout); else await openEditorFromPage(entry) } else if (btn.dataset.action === 'split') { const [sheet] = state.pages.splice(idx, 1, ...state.pages[idx].sheet.items); renderPages(); invalidatePdf(); status(t('sheetSplitDone')); restorePageFocus(sheet.sheet.items[0].id) } else if (btn.dataset.action === 'rotate') { const p = state.pages[idx]; busy(true, t('processing')); try { await rotatePage(p) } catch (e) { console.warn(e); status(t('processingFailed')) } finally { busy(false) } renderPages(); invalidatePdf(); restorePageFocus(p.id, 'rotate') } else if (btn.dataset.action === 'delete') { if (await confirmUI.ask(t('deletePageTitle'), t('deletePageMessage'))) { const [page] = state.pages.splice(idx, 1); state.lastDeleted = { page, index: idx }; renderPages(); toast(t('pageDeleted'), true); invalidatePdf(); restorePageFocus(state.pages[Math.min(idx, state.pages.length - 1)]?.id) } } });
+      $('#mergeModeBtn').addEventListener('click', () => { setMergeMode(true); renderPages() });
+      $('#mergeCancel').addEventListener('click', () => { setMergeMode(false); renderPages() });
+      $('#mergeNext').addEventListener('click', () => { const items = state.merge.ids.map(id => state.pages.find(p => p.id === id)).filter(Boolean); if (items.length) openComposer(items) });
+      $('#sheetHintGo').addEventListener('click', () => openComposer(state.pages.filter(p => !p.sheet && isCardLike(p))));
+      $('#sheetHintSkip').addEventListener('click', () => { state.sheetHintSkip = state.pages.filter(p => !p.sheet && isCardLike(p)).map(p => p.id).join(); renderSheetHint() });
+      $('#sheetLayouts').addEventListener('click', e => { const b = e.target.closest('[data-layout]'); if (!b || !state.composer) return; state.composer.layout = b.dataset.layout; renderComposer() });
+      $('#sheetReverse').addEventListener('click', () => { state.composer.items.reverse(); renderComposer() });
+      $('#sheetOk').addEventListener('click', commitComposer); $('#sheetCancel').addEventListener('click', closeComposer);
+      $('#sheetDialog').addEventListener('cancel', e => { e.preventDefault(); closeComposer() }); $('#sheetDialog').addEventListener('click', e => { if (e.target === $('#sheetDialog')) closeComposer() });
       $('#toastAction').addEventListener('click', () => { if (!state.lastDeleted) return; const { page, index, all } = state.lastDeleted; if (all) state.pages.unshift(...all); else if (page) state.pages.splice(Math.min(index, state.pages.length), 0, page); state.lastDeleted = null; $('#toast').classList.remove('show'); renderPages(); invalidatePdf(); restorePageFocus((all?.[0] || page)?.id) });
 
       // Re-render from the source photo with one more quarter turn, so rotating never re-compresses the page JPEG.
@@ -4030,9 +4264,9 @@ void main() {
         Object.assign(p, { rotation, width: out.width, height: out.height, thumb: ed ? await pageThumb(ed, out) : await canvasToDataURLThumb(out), jpeg: deferredBlob(out, PAGE_QUALITY) });
       }
       function bindPageDrag(card) {
-        card.addEventListener('keydown', e => { if (!e.altKey || !['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.key)) return; e.preventDefault(); const from = state.pages.findIndex(p => p.id === card.dataset.id), cols = innerWidth <= 600 ? 3 : innerWidth <= 820 ? 4 : 5, delta = e.key === 'ArrowLeft' ? -1 : e.key === 'ArrowRight' ? 1 : e.key === 'ArrowUp' ? -cols : cols, to = clamp(from + delta, 0, state.pages.length - 1); if (to === from) return; const [item] = state.pages.splice(from, 1); state.pages.splice(to, 0, item); const id = item.id; renderPages(); invalidatePdf(); requestAnimationFrame(() => document.querySelector(`.page-card[data-id="${id}"]`)?.focus()) });
+        card.addEventListener('keydown', e => { if (state.merge) { if ((e.key === ' ' || e.key === 'Enter') && e.target === card) { e.preventDefault(); toggleMergePick(card.dataset.id) } return } if (!e.altKey || !['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.key)) return; e.preventDefault(); const from = state.pages.findIndex(p => p.id === card.dataset.id), cols = innerWidth <= 600 ? 3 : innerWidth <= 820 ? 4 : 5, delta = e.key === 'ArrowLeft' ? -1 : e.key === 'ArrowRight' ? 1 : e.key === 'ArrowUp' ? -cols : cols, to = clamp(from + delta, 0, state.pages.length - 1); if (to === from) return; const [item] = state.pages.splice(from, 1); state.pages.splice(to, 0, item); const id = item.id; renderPages(); invalidatePdf(); requestAnimationFrame(() => document.querySelector(`.page-card[data-id="${id}"]`)?.focus()) });
         card.addEventListener('pointerdown', e => {
-          if (e.button !== 0 || e.target.closest('button')) return;
+          if (state.merge || e.button !== 0 || e.target.closest('button')) return;
           const handle = !!e.target.closest('.drag-hint');
           if (e.pointerType !== 'touch' || handle) e.preventDefault();
           const rect = card.getBoundingClientRect(), origin = { left: rect.left + scrollX, right: rect.right + scrollX, top: rect.top + scrollY, bottom: rect.bottom + scrollY };
@@ -4069,26 +4303,27 @@ void main() {
       function renderSummary() { const paper = $('#paperSelect').value, color = $('#colorSelect').value, limit = +$('#limitSelect').value; $('#summaryPaper').textContent = paper === 'a4' ? 'A4' : t('originalRatio'); $('#summaryColor').textContent = color === 'page' ? t('keepPageFilter') : color === 'color' ? t('color') : color === 'gray' ? t('grayscale') : t('blackWhite'); $('#summaryLimit').textContent = limit ? formatBytes(limit) : t('noLimit'); $('#summaryPages').textContent = state.pages.length }
       function applyPreset(name) { $$('.preset').forEach(b => b.classList.toggle('active', b.dataset.preset === name)); if (name === 'standard') { $('#paperSelect').value = 'a4'; $('#colorSelect').value = 'page'; $('#limitSelect').value = '0' } if (name === '1mb') { $('#paperSelect').value = 'a4'; $('#colorSelect').value = 'page'; $('#limitSelect').value = '1048576' } if (name === '2mb') { $('#paperSelect').value = 'a4'; $('#colorSelect').value = 'page'; $('#limitSelect').value = '2097152' } if (name === 'a4') { $('#paperSelect').value = 'a4'; $('#limitSelect').value = '0' } if (name === 'bw') { $('#paperSelect').value = 'a4'; $('#colorSelect').value = 'bw'; $('#limitSelect').value = '0' } renderSummary(); invalidatePdf() }
       function renderChecksIfAny() { if (!state.lastPdf) return; renderChecks(state.lastPdf.blob.size, state.lastPdf.limit) }
-      function renderChecks(size, limit) { const items = [{ ok: true, text: t('checkPages') }, { ok: true, text: $('#paperSelect').value === 'a4' ? t('checkA4') : t('checkOriginal') }, { ok: !limit || size <= limit, text: !limit || size <= limit ? t('checkSizeOk') : t('checkSizeWarn') }, { ok: true, text: t('checkReadable') }]; $('#checks').innerHTML = items.map(x => `<div class="check ${x.ok ? '' : 'warn'}">${x.ok ? icons.check : icons.warn}<span>${x.text}</span></div>`).join('') }
+      function renderChecks(size, limit) { const items = [{ ok: true, text: t('checkPages') }, { ok: true, text: $('#paperSelect').value === 'a4' ? t('checkA4') : t('checkOriginal') }, { ok: !limit || size <= limit, text: !limit || size <= limit ? t('checkSizeOk') : t('checkSizeWarn') }, { ok: true, text: t('checkReadable') }]; if (state.pages.some(p => p.sheet?.layout === 'card')) items.push({ ok: false, text: t('checkPrintActual') }); $('#checks').innerHTML = items.map(x => `<div class="check ${x.ok ? '' : 'warn'}">${x.ok ? icons.check : icons.warn}<span>${x.text}</span></div>`).join('') }
       function scaledCanvas(src, maxLong) { const s = Math.min(1, maxLong / Math.max(src.width, src.height)); if (s >= .999) return src; const c = document.createElement('canvas'); c.width = Math.max(32, Math.round(src.width * s)); c.height = Math.max(32, Math.round(src.height * s)); c.getContext('2d').drawImage(src, 0, 0, c.width, c.height); return c }
-      async function compressPage(page, override, budget) {
-        page.jpeg.start?.(); const jpeg = await page.jpeg, recolor = override === 'gray' || override === 'bw';
-        if (!recolor && (!budget || jpeg.size <= budget)) return { blob: jpeg, width: page.width, height: page.height, quality: PAGE_QUALITY };
-        let src = await canvasFromBlob(jpeg); if (recolor) src = applyFilter(src, override);
+      // maxLong caps the pixels of a scan that prints small on a sheet; the stored JPEG is reused whenever nothing has to change.
+      async function compressPage(page, override, budget, maxLong = 0) {
+        page.jpeg.start?.(); const jpeg = await page.jpeg, recolor = override === 'gray' || override === 'bw', shrink = maxLong > 0 && Math.max(page.width, page.height) > maxLong * 1.15;
+        if (!recolor && !shrink && (!budget || jpeg.size <= budget)) return { blob: jpeg, width: page.width, height: page.height, quality: PAGE_QUALITY };
+        let src = await canvasFromBlob(jpeg); if (recolor) src = applyFilter(src, override); if (shrink) src = scaledCanvas(src, maxLong);
         const encode = async (maxLong, q) => { const c = scaledCanvas(src, maxLong); return { blob: await canvasToBlob(c, 'image/jpeg', q), width: c.width, height: c.height, quality: q } };
-        const full = Math.max(src.width, src.height), first = recolor ? await encode(full, PAGE_QUALITY) : { blob: jpeg }; if (!budget || first.blob.size <= budget) return first.width ? first : { blob: jpeg, width: page.width, height: page.height, quality: PAGE_QUALITY };
+        const full = Math.max(src.width, src.height), first = recolor || shrink ? await encode(full, PAGE_QUALITY) : { blob: jpeg }; if (!budget || first.blob.size <= budget) return first.width ? first : { blob: jpeg, width: page.width, height: page.height, quality: PAGE_QUALITY };
         // Start from a size predicted from the known file size (quality .5 is roughly 55% of .82, size grows with pixel count).
-        let long = Math.max(760, Math.min(full, Math.floor(full * Math.sqrt(budget / (first.blob.size * .55)) * .95)));
+        const floorLong = maxLong ? Math.min(760, Math.round(maxLong / 2)) : 760; let long = Math.max(floorLong, Math.min(full, Math.floor(full * Math.sqrt(budget / (first.blob.size * .55)) * .95)));
         for (let round = 0; round < 4; round++) {
           const low = await encode(long, .5); if (low.blob.size <= budget) { const mid = await encode(long, .66); return mid.blob.size <= budget ? mid : low }
-          if (long <= 760) break; long = Math.max(760, Math.floor(long * Math.sqrt(budget / low.blob.size) * .95));
+          if (long <= floorLong) break; long = Math.max(floorLong, Math.floor(long * Math.sqrt(budget / low.blob.size) * .95));
         }
-        return await encode(760, .3);
+        return await encode(floorLong, .3);
       }
       function latin1Bytes(str) { const a = new Uint8Array(str.length); for (let i = 0; i < str.length; i++)a[i] = str.charCodeAt(i) & 255; return a }
       function concatBytes(parts) { const len = parts.reduce((n, p) => n + p.length, 0), out = new Uint8Array(len); let o = 0; for (const p of parts) { out.set(p, o); o += p.length } return out }
-      async function buildPdf(imageEntries, paperMode) { const objects = [null], add = x => (objects.push(x), objects.length - 1), pageIds = []; const catalogId = add(null), pagesId = add(null); for (let i = 0; i < imageEntries.length; i++) { const im = imageEntries[i], bytes = new Uint8Array(await im.blob.arrayBuffer()), imgId = add({ binary: bytes, head: `<< /Type /XObject /Subtype /Image /Width ${im.width} /Height ${im.height} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${bytes.length} >>\nstream\n`, tail: '\nendstream' }); let pw, ph; if (paperMode === 'a4') { const landscape = im.width > im.height; pw = landscape ? 841.89 : 595.28; ph = landscape ? 595.28 : 841.89 } else { pw = 595.28; ph = pw * im.height / im.width; if (ph > 900) { ph = 841.89; pw = ph * im.width / im.height } } const margin = paperMode === 'a4' ? 6 : 0, boxW = pw - margin * 2, boxH = ph - margin * 2, scale = Math.min(boxW / im.width, boxH / im.height), nearA4 = paperMode === 'a4' && Math.abs((im.width / im.height) / (boxW / boxH) - 1) < .12, dw = nearA4 ? boxW : im.width * scale, dh = nearA4 ? boxH : im.height * scale, x = (pw - dw) / 2, y = (ph - dh) / 2, content = `q\n${dw.toFixed(2)} 0 0 ${dh.toFixed(2)} ${x.toFixed(2)} ${y.toFixed(2)} cm\n/Im${i + 1} Do\nQ\n`, contentBytes = latin1Bytes(content), contentId = add(`<< /Length ${contentBytes.length} >>\nstream\n${content}endstream`), pageId = add(`<< /Type /Page /Parent ${pagesId} 0 R /MediaBox [0 0 ${pw.toFixed(2)} ${ph.toFixed(2)}] /Resources << /XObject << /Im${i + 1} ${imgId} 0 R >> >> /Contents ${contentId} 0 R >>`); pageIds.push(pageId) } objects[catalogId] = `<< /Type /Catalog /Pages ${pagesId} 0 R >>`; objects[pagesId] = `<< /Type /Pages /Count ${pageIds.length} /Kids [${pageIds.map(id => id + ' 0 R').join(' ')}] >>`; const parts = [latin1Bytes('%PDF-1.4\n%âãÏÓ\n')], offsets = [0]; let offset = parts[0].length; for (let i = 1; i < objects.length; i++) { offsets[i] = offset; const o = objects[i], head = latin1Bytes(`${i} 0 obj\n`), body = typeof o === 'string' ? latin1Bytes(o) : concatBytes([latin1Bytes(o.head), o.binary, latin1Bytes(o.tail)]), end = latin1Bytes('\nendobj\n'), chunk = concatBytes([head, body, end]); parts.push(chunk); offset += chunk.length } const xrefOffset = offset; let xref = `xref\n0 ${objects.length}\n0000000000 65535 f \n`; for (let i = 1; i < objects.length; i++)xref += String(offsets[i]).padStart(10, '0') + ' 00000 n \n'; xref += `trailer\n<< /Size ${objects.length} /Root ${catalogId} 0 R >>\nstartxref\n${xrefOffset}\n%%EOF`; parts.push(latin1Bytes(xref)); return new Blob(parts, { type: 'application/pdf' }) }
-      async function generatePdf() { if (!state.pages.length) return; invalidatePdf(); busy(true, t('buildingPdf'), t('compressing')); await sleep(30); const limit = +$('#limitSelect').value, paper = $('#paperSelect').value, override = $('#colorSelect').value, budget = limit ? Math.max(22000, Math.floor((limit * 0.88) / state.pages.length)) : 0, total = state.pages.length; let finished = 0; const compressAll = b => Promise.all(state.pages.map(p => compressPage(p, override, b).then(e => { $('#busyDetail').textContent = `${++finished} / ${total}`; return e }))); let blob = await buildPdf(await compressAll(budget), paper); if (limit && blob.size > limit) { finished = 0; blob = await buildPdf(await compressAll(Math.max(18000, Math.floor((limit * .76) / total))), paper) } const name = normalizeFilename($('#filenameInput').value), url = URL.createObjectURL(blob); state.lastPdf = { blob, url, name, limit }; $('#resultName').textContent = name; $('#resultSize').textContent = formatBytes(blob.size); renderChecks(blob.size, limit); $('#resultCard').classList.remove('hidden'); busy(false); status(blob.size <= limit || !limit ? t('pdfReady') : t('sizeTargetFailed'), 4200); return state.lastPdf }
+      async function buildPdf(imageEntries, paperMode) { const objects = [null], add = x => (objects.push(x), objects.length - 1), pageIds = []; const catalogId = add(null), pagesId = add(null); const addImage = async im => { const bytes = new Uint8Array(await im.blob.arrayBuffer()); return add({ binary: bytes, head: `<< /Type /XObject /Subtype /Image /Width ${im.width} /Height ${im.height} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${bytes.length} >>\nstream\n`, tail: '\nendstream' }) }; for (let i = 0; i < imageEntries.length; i++) { const im = imageEntries[i]; if (im.boxes) { const mm = 72 / 25.4, pw = A4_MM[0] * mm, ph = A4_MM[1] * mm, n = v => v.toFixed(2); let content = '', xobjects = ''; for (let k = 0; k < im.boxes.length; k++) { const b = im.boxes[k], name = `Im${i + 1}x${k + 1}`, x = b.x * mm, w = b.w * mm, h = b.h * mm, y = ph - b.y * mm - h, matrix = b.turn === 1 ? `0 ${n(-h)} ${n(w)} 0 ${n(x)} ${n(y + h)}` : b.turn === 3 ? `0 ${n(h)} ${n(-w)} 0 ${n(x + w)} ${n(y)}` : `${n(w)} 0 0 ${n(h)} ${n(x)} ${n(y)}`; xobjects += `/${name} ${await addImage(im.images[k])} 0 R `; content += `q\n${matrix} cm\n/${name} Do\nQ\n` } const contentBytes = latin1Bytes(content), contentId = add(`<< /Length ${contentBytes.length} >>\nstream\n${content}endstream`); pageIds.push(add(`<< /Type /Page /Parent ${pagesId} 0 R /MediaBox [0 0 ${n(pw)} ${n(ph)}] /Resources << /XObject << ${xobjects}>> >> /Contents ${contentId} 0 R >>`)); continue } const imgId = await addImage(im); let pw, ph; if (paperMode === 'a4') { const landscape = im.width > im.height; pw = landscape ? 841.89 : 595.28; ph = landscape ? 595.28 : 841.89 } else { pw = 595.28; ph = pw * im.height / im.width; if (ph > 900) { ph = 841.89; pw = ph * im.width / im.height } } const margin = paperMode === 'a4' ? 6 : 0, boxW = pw - margin * 2, boxH = ph - margin * 2, scale = Math.min(boxW / im.width, boxH / im.height), nearA4 = paperMode === 'a4' && Math.abs((im.width / im.height) / (boxW / boxH) - 1) < .12, dw = nearA4 ? boxW : im.width * scale, dh = nearA4 ? boxH : im.height * scale, x = (pw - dw) / 2, y = (ph - dh) / 2, content = `q\n${dw.toFixed(2)} 0 0 ${dh.toFixed(2)} ${x.toFixed(2)} ${y.toFixed(2)} cm\n/Im${i + 1} Do\nQ\n`, contentBytes = latin1Bytes(content), contentId = add(`<< /Length ${contentBytes.length} >>\nstream\n${content}endstream`), pageId = add(`<< /Type /Page /Parent ${pagesId} 0 R /MediaBox [0 0 ${pw.toFixed(2)} ${ph.toFixed(2)}] /Resources << /XObject << /Im${i + 1} ${imgId} 0 R >> >> /Contents ${contentId} 0 R >>`); pageIds.push(pageId) } objects[catalogId] = `<< /Type /Catalog /Pages ${pagesId} 0 R >>`; objects[pagesId] = `<< /Type /Pages /Count ${pageIds.length} /Kids [${pageIds.map(id => id + ' 0 R').join(' ')}] >>`; const parts = [latin1Bytes('%PDF-1.4\n%âãÏÓ\n')], offsets = [0]; let offset = parts[0].length; for (let i = 1; i < objects.length; i++) { offsets[i] = offset; const o = objects[i], head = latin1Bytes(`${i} 0 obj\n`), body = typeof o === 'string' ? latin1Bytes(o) : concatBytes([latin1Bytes(o.head), o.binary, latin1Bytes(o.tail)]), end = latin1Bytes('\nendobj\n'), chunk = concatBytes([head, body, end]); parts.push(chunk); offset += chunk.length } const xrefOffset = offset; let xref = `xref\n0 ${objects.length}\n0000000000 65535 f \n`; for (let i = 1; i < objects.length; i++)xref += String(offsets[i]).padStart(10, '0') + ' 00000 n \n'; xref += `trailer\n<< /Size ${objects.length} /Root ${catalogId} 0 R >>\nstartxref\n${xrefOffset}\n%%EOF`; parts.push(latin1Bytes(xref)); return new Blob(parts, { type: 'application/pdf' }) }
+      async function generatePdf() { if (!state.pages.length) return; invalidatePdf(); busy(true, t('buildingPdf'), t('compressing')); await sleep(30); const limit = +$('#limitSelect').value, paper = $('#paperSelect').value, override = $('#colorSelect').value, plans = state.pages.map(p => p.sheet ? placeSheet(p.sheet.layout, p.sheet.items) : null), jobs = state.pages.flatMap((p, i) => p.sheet ? p.sheet.items.map((page, k) => ({ page, maxLong: Math.round(Math.max(plans[i][k].w, plans[i][k].h) / 25.4 * SHEET_DPI) })) : [{ page: p, maxLong: 0 }]), total = jobs.length, budget = limit ? Math.max(22000, Math.floor((limit * 0.88) / total)) : 0; let finished = 0; const compressAll = b => Promise.all(jobs.map(j => compressPage(j.page, override, b, j.maxLong).then(e => { $('#busyDetail').textContent = `${++finished} / ${total}`; return e }))); const assemble = done => { let k = 0; return state.pages.map((p, i) => p.sheet ? { boxes: plans[i], images: p.sheet.items.map(() => done[k++]) } : done[k++]) }; let blob = await buildPdf(assemble(await compressAll(budget)), paper); if (limit && blob.size > limit) { finished = 0; blob = await buildPdf(assemble(await compressAll(Math.max(18000, Math.floor((limit * .76) / total)))), paper) } const name = normalizeFilename($('#filenameInput').value), url = URL.createObjectURL(blob); state.lastPdf = { blob, url, name, limit }; $('#resultName').textContent = name; $('#resultSize').textContent = formatBytes(blob.size); renderChecks(blob.size, limit); $('#resultCard').classList.remove('hidden'); busy(false); status(blob.size <= limit || !limit ? t('pdfReady') : t('sizeTargetFailed'), 4200); return state.lastPdf }
       function syncPdfFilename(normalizeInput = false) { const input = $('#filenameInput'), name = normalizeFilename(input.value); if (normalizeInput) input.value = name; if (state.lastPdf) { state.lastPdf.name = name; $('#resultName').textContent = name } return name }
       function downloadPdf() { syncPdfFilename(true); const p = state.lastPdf; if (!p) return; const a = document.createElement('a'); a.href = p.url; a.download = p.name; document.body.appendChild(a); a.click(); a.remove(); status(t('downloaded')) }
       async function sharePdf() { syncPdfFilename(true); const p = state.lastPdf; if (!p) return; try { const file = new File([p.blob], p.name, { type: 'application/pdf' }); if (!navigator.canShare?.({ files: [file] })) { status(t('shareUnsupported'), 4200); return } await navigator.share({ files: [file], title: p.name }); status(t('shared')) } catch (e) { if (e?.name !== 'AbortError') status(t('shareUnsupported'), 4200) } }
@@ -4135,8 +4370,8 @@ void main() {
       function saveBlobAsDownload(blob, name) { const url = URL.createObjectURL(blob), a = document.createElement('a'); a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 30000) }
       async function savePdfToFolder(pdf, subfolder = '', autoBase = '') { const f = state.folder; try { if (f?.kind === 'bridge') { const r = await bridgeCall('save', autoBase ? { folder: f.path, sub: subfolder, auto: autoBase } : { folder: f.path, sub: subfolder, name: pdf.name }, pdf.blob); return { where: r.path, path: r.path } } if (f?.kind === 'fs') { if (await f.handle.queryPermission?.({ mode: 'readwrite' }) !== 'granted' && await f.handle.requestPermission?.({ mode: 'readwrite' }) !== 'granted') throw new Error('permission'); const dir = subfolder ? await procedureDir(f.handle, subfolder) : f.handle; let name = autoBase ? '' : await uniqueFsName(dir, pdf.name); if (autoBase) for (let n = await nextFsSequence(dir, autoBase), end = n + 1000; n < end; n++) { const candidate = `${autoBase}_${n}.pdf`; try { await dir.getFileHandle(candidate) } catch (e) { if (e?.name === 'NotFoundError') { name = candidate; break } throw e } } if (!name) throw new Error('No free file name'); const file = await dir.getFileHandle(name, { create: true }), out = await file.createWritable(); await out.write(pdf.blob); await out.close(); return { where: [f.name, subfolder && dir.name, name].filter(Boolean).join('/') } } } catch (e) { console.warn(e); status(t('saveFailed'), 6000) } const name = autoBase ? `${autoBase}_${nextDownloadSequence(autoBase)}.pdf` : pdf.name; saveBlobAsDownload(pdf.blob, name); return { where: `${t('folderDownloads')}/${name}` } }
       function goToExport() { if (innerWidth <= 600) setMobileView('exportSection'); else $('#exportSection').scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' }) }
-      function startNewSession() { const old = state.lastPdf; state.lastPdf = null; $('#resultCard').classList.add('hidden'); if (old?.url) setTimeout(() => URL.revokeObjectURL(old.url), 30000); state.pages = []; state.lastDeleted = null; renderPages(); delete $('#filenameInput').dataset.edited; setFilename('') }
-      async function finishSession() { if (state.sessionBusy) return; const ed = state.editor; if (ed) { if (ed.saving) return; if (!await saveEditorPage()) return } if (!state.pages.length) { status(t('noPagesToExport')); return } if (!state.autoExport) { goToExport(); return } const subfolder = safeFolderName(state.procedure); if (subfolder && !state.folder) { status(t('chooseFolderFirst'), 6000); await chooseFolder(); if (!state.folder) return } const custom = $('#filenameInput').value.trim(), autoBase = custom ? '' : (subfolder || 'document'); state.sessionBusy = true; renderSessionCount(); try { if (custom) syncPdfFilename(true); const pdfPages = state.pages.length, pdf = await generatePdf(); if (!pdf) return; const saved = await savePdfToFolder(pdf, subfolder, autoBase), message = t('savedTo').replace('{path}', saved.where); state.lastSaved = saved; $('#lastSavedText').textContent = message; $('#lastSaved').classList.remove('hidden'); $('#revealBtn').classList.toggle('hidden', !saved.path); toast(message, false); countSavedPages(pdfPages); if (subfolder) { state.procedureHistory = [subfolder, ...state.procedureHistory.filter(x => x.toLowerCase() !== subfolder.toLowerCase())].slice(0, 30); savePrefs(); renderSession() } startNewSession() } catch (e) { console.warn(e); busy(false); status(t('processingFailed'), 4200) } finally { state.sessionBusy = false; renderSessionCount() } }
+      function startNewSession() { const old = state.lastPdf; state.lastPdf = null; $('#resultCard').classList.add('hidden'); if (old?.url) setTimeout(() => URL.revokeObjectURL(old.url), 30000); state.pages = []; state.lastDeleted = null; state.merge = null; state.sheetHintSkip = ''; renderPages(); delete $('#filenameInput').dataset.edited; setFilename('') }
+      async function finishSession() { if (state.sessionBusy) return; const ed = state.editor; if (ed) { if (ed.saving) return; if (!await saveEditorPage()) return } if (!state.pages.length) { status(t('noPagesToExport')); return } if (!state.autoExport) { goToExport(); return } const subfolder = safeFolderName(state.procedure); if (subfolder && !state.folder) { status(t('chooseFolderFirst'), 6000); await chooseFolder(); if (!state.folder) return } const custom = $('#filenameInput').value.trim(), autoBase = custom ? '' : (subfolder || 'document'); state.sessionBusy = true; renderSessionCount(); try { if (custom) syncPdfFilename(true); const pdfPages = scanCount(), pdf = await generatePdf(); if (!pdf) return; const saved = await savePdfToFolder(pdf, subfolder, autoBase), message = t('savedTo').replace('{path}', saved.where); state.lastSaved = saved; $('#lastSavedText').textContent = message; $('#lastSaved').classList.remove('hidden'); $('#revealBtn').classList.toggle('hidden', !saved.path); toast(message, false); countSavedPages(pdfPages); if (subfolder) { state.procedureHistory = [subfolder, ...state.procedureHistory.filter(x => x.toLowerCase() !== subfolder.toLowerCase())].slice(0, 30); savePrefs(); renderSession() } startNewSession() } catch (e) { console.warn(e); busy(false); status(t('processingFailed'), 4200) } finally { state.sessionBusy = false; renderSessionCount() } }
 
       function setAutoCapture(enabled) { state.autoCapture = !!enabled; $('#autoCapture').checked = state.autoCapture; $('#autoChip').classList.toggle('hidden', !state.autoCapture); $('#mobileAutoBtn').classList.toggle('active', state.autoCapture); state.stableCount = 0; state.lastAutoCorners = null; state.auto.holdStart = 0; savePrefs() }
 

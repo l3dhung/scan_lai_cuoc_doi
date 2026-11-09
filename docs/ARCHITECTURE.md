@@ -41,6 +41,10 @@ On paper-like pages the Auto filter turns pixels near the local paper brightness
 
 The 1 MB / 2 MB presets budget bytes per page. A page whose stored JPEG fits is used as is; otherwise the target size is predicted from the stored JPEG's size and a few encodes pick the quality and raster dimensions. Pages are encoded in parallel. The generated PDF is measured after creation; if necessary, a tighter pass is attempted. The final readiness panel reports actual output size and whether the selected target was met.
 
+## A4 sheets
+
+A sheet is an entry of `state.pages` of the form `{ id, sheet: { layout, items } }`, printed as one A4 page. `items` are ordinary page objects, so splitting a sheet returns them unchanged. `placeSheet` turns a layout (`card`, `two`, `four`) and the items into boxes in millimetres; the same boxes drive the on-screen preview and the PDF matrices, so the two cannot disagree. The `card` layout prints ID-1 cards at 85.6 × 53.98 mm. Scans on a sheet are limited to about 400 dpi at their printed size, and size budgets are per scan rather than per PDF page.
+
 ## Privacy boundary
 
 Runtime network access is blocked by CSP with `connect-src 'none'`. Camera frames, imported images, editable page sources, corrected pages, and generated PDFs stay in the browser unless the user explicitly saves or shares the result.
