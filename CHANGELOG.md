@@ -1,5 +1,14 @@
 # Changelog
 
+## 2.0.0 - 2026-11-10
+
+- Rename the app to Life-scanner, localize it in Vietnamese, and add a scan-session workflow: save PDFs straight into a chosen folder, grouped by procedure, numbered, never overwritten.
+- Add a procedure and page tally under the camera frame.
+- Detect a new page swapped in at the same spot, shrink PDF margins, and speed up page rendering.
+- Ship as a macOS app, a Windows exe (WebView2) and an MSIX package for the Microsoft Store, with a new icon.
+- Add A4 sheets: pick scans in order and print them on one A4 page, at real ID-card size (up to 10 sides) or 2, 4 or 6 per sheet. Split a sheet back into its scans at any time.
+- Allow up to 100 photos per import (was 30).
+
 ## 1.0.4 - 2026-10-27
 
 - Keep the header version visible on narrow smartphones without overlapping the app name or language/Help controls. The camera overlay shows the same configuration-derived version while the desktop header stays hidden in the camera-first mobile layout.

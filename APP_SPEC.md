@@ -5,7 +5,7 @@
 - **Purpose:** Turn paper documents into submission-ready PDFs from a phone browser without uploading source images.
 - **Primary users:** People submitting forms to government, school, insurance, workplaces, and other web portals.
 - **Release:** `dist/index.html` and `dist/index.self-extract.html`
-- **Version:** `1.0.4`
+- **Version:** `2.0.0`
 
 ## 2. Core outcome
 A user can photograph or import several paper pages, automatically detect the document, fine-tune four corners, correct perspective, enhance readability, reorder pages, and generate/share one PDF that satisfies common submission constraints.

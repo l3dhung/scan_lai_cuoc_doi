@@ -2,7 +2,7 @@
   "$schema": "./schemas/app-config.schema.json",
   "name": "Life-scanner",
   "slug": "document-scanner",
-  "version": "1.0.4",
+  "version": "2.0.0",
   "description": "Life-scanner: chụp giấy tờ, nắn phẳng, sắp trang và xuất PDF ngay trên máy, không gửi gì đi đâu.",
   "defaultLanguage": "vi",
   "repository": {
