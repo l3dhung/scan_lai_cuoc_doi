@@ -43,7 +43,7 @@ The 1 MB / 2 MB presets budget bytes per page. A page whose stored JPEG fits is 
 
 ## A4 sheets
 
-A sheet is an entry of `state.pages` of the form `{ id, sheet: { layout, items } }`, printed as one A4 page. `items` are ordinary page objects, so splitting a sheet returns them unchanged. `placeSheet` turns a layout (`card`, `two`, `four`) and the items into boxes in millimetres; the same boxes drive the on-screen preview and the PDF matrices, so the two cannot disagree. The `card` layout prints ID-1 cards at 85.6 × 53.98 mm. Scans on a sheet are limited to about 400 dpi at their printed size, and size budgets are per scan rather than per PDF page.
+A sheet is an entry of `state.pages` of the form `{ id, sheet: { layout, items } }`, printed as one A4 page. `items` are ordinary page objects, so splitting a sheet returns them unchanged. `placeSheet` turns a layout (`card`, `two`, `four`, `six`) and the items into boxes in millimetres; the same boxes drive the on-screen preview and the PDF matrices, so the two cannot disagree. The `card` layout prints ID-1 cards at 85.6 × 53.98 mm. Scans on a sheet are limited to about 400 dpi at their printed size, and size budgets are per scan rather than per PDF page.
 
 ## Privacy boundary
 

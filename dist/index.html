@@ -3366,7 +3366,8 @@
       <div class="sheet-layouts" id="sheetLayouts"><button class="sheet-layout" type="button" data-layout="card"
           data-i18n="layoutCard">Thẻ thật cỡ</button><button class="sheet-layout" type="button" data-layout="two"
           data-i18n="layoutTwo">2 ảnh/tờ</button><button class="sheet-layout" type="button" data-layout="four"
-          data-i18n="layoutFour">4 ảnh/tờ</button></div>
+          data-i18n="layoutFour">4 ảnh/tờ</button><button class="sheet-layout" type="button" data-layout="six"
+          data-i18n="layoutSix">6 ảnh/tờ</button></div>
       <div class="sheet-previews" id="sheetPreviews"></div>
       <p id="sheetNote"></p>
     </div>
@@ -3415,7 +3416,7 @@
     }
   }
 }</script>
-  <script type="application/json" id="buildManifest">{"name":"Life-scanner","version":"1.0.4","generatedAtUtc":"2026-11-09T08:45:08.827Z","dependencyCount":0,"runtimeNetworkBlocked":true}</script>
+  <script type="application/json" id="buildManifest">{"name":"Life-scanner","version":"1.0.4","generatedAtUtc":"2026-11-10T05:06:00.586Z","dependencyCount":0,"runtimeNetworkBlocked":true}</script>
   <script type="application/json" id="assetBundle">"e30="</script>
   <script>
     (() => {
@@ -3564,7 +3565,7 @@
           clearTitle: 'Xóa hết các trang?',
           clearMessage: 'Toàn bộ trang đang làm sẽ bay màu.',
           fileUnsupported: 'Trình duyệt chịu, không đọc nổi ảnh này.',
-          tooMany: 'Mỗi lần thêm tối đa 30 trang thôi, từ từ.',
+          tooMany: 'Mỗi lần thêm tối đa {n} trang thôi, từ từ.',
           buildingPdf: 'Đang tạo PDF',
           compressing: 'Đang nén cho vừa dung lượng…',
           pdfReady: 'PDF xong rồi',
@@ -3654,6 +3655,7 @@
           layoutCard: 'Thẻ thật cỡ',
           layoutTwo: '2 ảnh/tờ',
           layoutFour: '4 ảnh/tờ',
+          layoutSix: '6 ảnh/tờ',
           sheetNoteCard: 'Thẻ in đúng 85,6 × 54 mm. Khi in nhớ chọn 100% (Actual size), chọn Fit là thẻ phình to ngay.',
           sheetNoteFit: 'Ảnh nằm gọn trong ô, không méo, không mất miếng nào.',
           sheetNoteMany: 'Thành {n} tờ A4.',
@@ -3929,11 +3931,12 @@
 
       async function fileToBitmap(file) { try { if ('createImageBitmap' in window) return await createImageBitmap(file, { imageOrientation: 'from-image' }) } catch { } return await new Promise((resolve, reject) => { const img = new Image(), url = URL.createObjectURL(file); img.onload = () => { URL.revokeObjectURL(url); resolve(img) }; img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('decode')) }; img.src = url }) }
       async function captureFrame() { if (state.editor || state.importQueue) return; if (!state.procedureActive) { status(t('procedureIdle'), 4200); return } const v = $('#video'); if (!state.stream || v.readyState < 2) return; const r = videoSourceRect(v), c = document.createElement('canvas'); c.width = Math.max(1, Math.round(r.sw)); c.height = Math.max(1, Math.round(r.sh)); c.getContext('2d').drawImage(v, r.sx, r.sy, r.sw, r.sh, 0, 0, c.width, c.height); const live = state.liveDetection && performance.now() - state.liveDetection.at <= 1100 ? { corners: state.liveDetection.corners.map(p => ({ ...p })), confidence: state.liveDetection.confidence } : null; let print = null; if (live) { const small = analyzeVideoFrame.canvas; if (small?.width) print = pageFingerprint(small, live.corners.map(p => ({ x: p.x * small.width, y: p.y * small.height }))) } const result = await openEditorFromSource(c, 'camera', live), a = state.auto; a.holdStart = 0; a.lastCorners = null; a.needChange = result !== 'retake'; a.capturedCorners = live?.corners || null; a.capturedPrint = print; a.armedAt = performance.now() + (result === 'retake' ? 1400 : 900) }
+      const MAX_IMPORT = 100;
       async function importFiles(files) {
         if (state.importQueue || state.editor) return;
-        const arr = [...files].slice(0, 30); $('#fileInput').value = ''; if (!arr.length) return;
+        const arr = [...files].slice(0, MAX_IMPORT); $('#fileInput').value = ''; if (!arr.length) return;
         const queue = { files: arr, index: 0, cancelled: false }; state.importQueue = queue;
-        if (files.length > 30) status(t('tooMany'));
+        if (files.length > MAX_IMPORT) status(t('tooMany').replace('{n}', MAX_IMPORT));
         try {
           for (let i = 0; i < arr.length; i++) {
             if (state.importQueue !== queue || queue.cancelled) break;
@@ -4237,7 +4240,7 @@ void main() {
       function invalidatePdf() { if (state.lastPdf?.url) URL.revokeObjectURL(state.lastPdf.url); state.lastPdf = null; $('#resultCard').classList.add('hidden') }
       // A sheet is one A4 page holding several scans: an entry of state.pages with sheet: { layout, items }, where items
       // are ordinary pages, so splitting it gives them back untouched. Measurements are in mm from the top-left corner.
-      const A4_MM = [210, 297], ID1_MM = [85.6, 53.98], SHEET_DPI = 400, SHEET_CAP = { card: 10, two: 2, four: 4 };
+      const A4_MM = [210, 297], ID1_MM = [85.6, 53.98], SHEET_DPI = 400, SHEET_CAP = { card: 10, two: 2, four: 4, six: 6 }, SHEET_GRID = { two: [1, 2], four: [2, 2], six: [2, 3] };
       const isCardLike = p => { const r = Math.max(p.width, p.height) / Math.min(p.width, p.height); return r >= 1.48 && r <= 1.72 };
       function sheetCells(layout, n) {
         const [pw, ph] = A4_MM, cells = [], margin = 10, gap = 6;
@@ -4246,7 +4249,7 @@ void main() {
           const rows = Math.ceil(n / 2), rowGap = Math.min(5, (ph - 16 - rows * h) / Math.max(1, rows - 1)), left = (pw - w * 2 - gap) / 2, top = Math.max(8, Math.min(12, (ph - rows * h - (rows - 1) * rowGap) / 2));
           for (let i = 0; i < n; i++) cells.push({ x: left + (i % 2) * (w + gap), y: top + Math.floor(i / 2) * (h + rowGap), w, h }); return cells;
         }
-        const cols = layout === 'four' ? 2 : 1, w = (pw - margin * 2 - gap * (cols - 1)) / cols, h = (ph - margin * 2 - gap) / 2;
+        const [cols, rows] = SHEET_GRID[layout] || SHEET_GRID.four, w = (pw - margin * 2 - gap * (cols - 1)) / cols, h = (ph - margin * 2 - gap * (rows - 1)) / rows;
         for (let i = 0; i < n; i++) cells.push({ x: margin + (i % cols) * (w + gap), y: margin + Math.floor(i / cols) * (h + gap), w, h }); return cells;
       }
       // Quarter turn 1 is what auto-portrait applies to landscape paper, 3 undoes it, so a card shot upright comes back upright.
@@ -4259,7 +4262,7 @@ void main() {
       function toggleMergePick(id) { const p = state.pages.find(x => x.id === id); if (!p || p.sheet) return; const ids = state.merge.ids, at = ids.indexOf(id); if (at >= 0) ids.splice(at, 1); else ids.push(id); syncMergeUi() }
       function renderSheetHint() { const cards = state.pages.filter(p => !p.sheet && isCardLike(p)), key = cards.map(p => p.id).join(), show = cards.length >= 2 && !state.merge && key !== state.sheetHintSkip; $('#sheetHint').classList.toggle('hidden', !show); if (show) $('#sheetHintText').textContent = t('sheetHintText').replace('{n}', cards.length) }
       function setMergeMode(on) { state.merge = on ? { ids: [] } : null; syncMergeUi(); renderSheetHint() }
-      function openComposer(items, sheetId = null, layout = null) { state.composer = { items: items.slice(), sheetId, layout: layout || (items.every(isCardLike) ? 'card' : items.length <= 2 ? 'two' : 'four') }; renderComposer(); $('#sheetDialog').showModal(); $('#sheetOk').focus() }
+      function openComposer(items, sheetId = null, layout = null) { state.composer = { items: items.slice(), sheetId, layout: layout || (items.every(isCardLike) ? 'card' : items.length <= 2 ? 'two' : items.length <= 4 ? 'four' : 'six') }; renderComposer(); $('#sheetDialog').showModal(); $('#sheetOk').focus() }
       function renderComposer() { const c = state.composer, groups = chunkItems(c.items, SHEET_CAP[c.layout]); $$('.sheet-layout').forEach(b => b.classList.toggle('active', b.dataset.layout === c.layout)); $('#sheetPreviews').innerHTML = groups.map(g => sheetMarkup(c.layout, g)).join(''); $('#sheetPreviews').style.justifyContent = groups.length > 1 ? 'flex-start' : ''; $('#sheetNote').textContent = t(c.layout === 'card' ? 'sheetNoteCard' : 'sheetNoteFit') + (groups.length > 1 ? ' ' + t('sheetNoteMany').replace('{n}', groups.length) : ''); $('#sheetReverse').classList.toggle('hidden', c.items.length < 2) }
       function closeComposer() { state.composer = null; $('#sheetDialog').close() }
       function commitComposer() { const c = state.composer; if (!c) return; const groups = chunkItems(c.items, SHEET_CAP[c.layout]).map(items => ({ id: uid(), sheet: { layout: c.layout, items } })); let at; if (c.sheetId) { at = state.pages.findIndex(p => p.id === c.sheetId); if (at < 0) { closeComposer(); return } state.pages.splice(at, 1) } else { const ids = new Set(c.items.map(p => p.id)); at = state.pages.findIndex(p => ids.has(p.id)); if (at < 0) { closeComposer(); return } state.pages = state.pages.filter(p => !ids.has(p.id)) } state.pages.splice(at, 0, ...groups); state.merge = null; closeComposer(); renderPages(); invalidatePdf(); status(t('sheetMerged')); restorePageFocus(groups[0].id) }
